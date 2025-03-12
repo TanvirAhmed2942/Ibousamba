@@ -42,10 +42,10 @@ textarea::placeholder {
 }
 
 .ant-modal .ant-modal-close {
-  color: #ffffff !important;
+  color: black !important;
 }
 .ant-modal .ant-modal-close:hover {
-  background-color: #a11d26;
+  background-color: #d99e1e;
 }
 /* Avatar */
 .ant-space-gap-col-small {
@@ -239,7 +239,10 @@ textarea::placeholder {
   .ant-upload.ant-upload-select {
   width: 100%;
   height: 130px;
-  background-color: #ffffff;
+}
+.ant-upload {
+  background-color: #ffffff !important;
+  color: azure;
 }
 
 .jodit-container:not(.jodit_inline) {
@@ -285,8 +288,16 @@ textarea::placeholder {
   color: #975cdb;
 }
 
+:where(.css-dev-only-do-not-override-15svtq1).ant-select-outlined:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
+  border: 1px solid white;
+  background: transparent;
+  font-size: larger;
+}
 .ant-select-selection-item {
-  color: white !important;
+  color: black !important;
 }
 .ant-select-selection-item-remove {
   color: white !important;
@@ -295,11 +306,11 @@ textarea::placeholder {
   color: #808080 !important;
 }
 .ant-select-arrow {
-  color: white !important;
+  color: black !important;
 }
 
 .ant-select-selector {
-  height: 48px !important;
+  height: 30px !important;
   border: none !important;
 }
 .anticon-check {
@@ -307,7 +318,7 @@ textarea::placeholder {
 }
 
 .ant-upload {
-  background-color: #000 !important;
+  background-color: white !important;
   border-radius: 8px;
 }
 

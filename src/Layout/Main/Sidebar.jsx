@@ -80,12 +80,12 @@ const Sidebar = ({ isCollapsed }) => {
           ],
     },
     {
-      key: "/product-list",
+      key: "/products",
       icon: <LuBoxes size={25} />,
       label: isCollapsed ? (
-        <Link to="/product-list"></Link>
+        <Link to="/products"></Link>
       ) : (
-        <Link to="/product-list">Product List</Link>
+        <Link to="/products">Products</Link>
       ),
     },
     {

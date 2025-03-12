@@ -1,82 +1,149 @@
+// import React, { useState } from "react";
+// import { Table, ConfigProvider, Button } from "antd";
+// import { IoEye } from "react-icons/io5";
+// import { FaPlus } from "react-icons/fa6";
+
+// function MainCategory() {
+//   return (
+//     <ConfigProvider
+//       theme={{
+//         components: {
+//           Button: {
+//             defaultBg: "#d99e1e",
+//             defaultColor: "black",
+//             defaultBorderColor: "#d99e1e ",
+//             defaultHoverBg: "#d99e1e ",
+//             defaultHoverColor: "black",
+//             defaultHoverBorderColor: "#d99e1e ",
+//             defaultActiveBg: "#d99e1e",
+//             defaultActiveColor: "black",
+//             defaultActiveBorderColor: "#d99e1e ",
+//           },
+//         },
+//       }}
+//     >
+//       <div className="px-3">
+//         <Button block className="h-10 rounded-lg font-semibold mb-4">
+//           <FaPlus />
+//           Add Category
+//         </Button>
+//         <MainCategoryTable />
+//       </div>
+//     </ConfigProvider>
+//   );
+// }
+
+// export default MainCategory;
+
+// const MainCategoryTable = () => {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const showModal = (record) => {
+//     setIsModalOpen(true); // Open modal
+//   };
+//   const columns = [
+//     {
+//       title: "Serial",
+//       dataIndex: "serial",
+//       key: "serial",
+//     },
+
+//     {
+//       title: "Image",
+//       dataIndex: "categoryImg",
+//       key: "categoryImg",
+//     },
+//     {
+//       title: "Category",
+//       dataIndex: "category",
+//       key: "category",
+//     },
+//     {
+//       title: "Action",
+//       key: "action",
+//       render: (_, record) => (
+//         <a
+//           href="#"
+//           className="hover:text-[#a11d26]"
+//           onClick={(e) => {
+//             e.preventDefault();
+//             showModal(record); // Pass row data
+//           }}
+//         >
+//           <IoEye size={24} />
+//         </a>
+//       ),
+//     },
+//   ];
+//   return (
+//     <div>
+//       <ConfigProvider
+//         theme={{
+//           components: {
+//             Table: {
+//               headerBg: "#575858",
+//               headerSplitColor: "none",
+//               headerColor: "white",
+//               borderColor: "#A3A3A3",
+//               colorBgContainer: "#3a3a3a",
+//               rowHoverBg: "#4a4a4a",
+//               colorText: "white",
+//             },
+//           },
+//         }}
+//       >
+//         <div className="custom-table">
+//           <Table columns={columns} dataSource={rawData} pagination />
+//         </div>
+//       </ConfigProvider>
+//     </div>
+//   );
+// };
+
+// const rawData = [
+//   {
+//     key: "1",
+//     serial: "001",
+//     categoryImg: "https://via.placeholder.com/50",
+//     category: "Heavy Machinaries",
+//   },
+//   {
+//     key: "2",
+//     serial: "002",
+//     categoryImg: "https://via.placeholder.com/50",
+//     category: "Light Accessories",
+//   },
+// ];
+
 import React, { useState } from "react";
-import { LuArrowLeftRight } from "react-icons/lu";
 import { Table, ConfigProvider, Button } from "antd";
 import { IoEye } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
+import AddCategoryModal from "./AddCategoryModal";
+import MainCategoryTable from "./MainCategoryTable";
 
-function MainCategory() {
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Button: {
-            defaultBg: "#d99e1e",
-            defaultColor: "black",
-            defaultBorderColor: "#d99e1e ",
-            defaultHoverBg: "#d99e1e ",
-            defaultHoverColor: "black",
-            defaultHoverBorderColor: "#d99e1e ",
-            defaultActiveBg: "#d99e1e",
-            defaultActiveColor: "black",
-            defaultActiveBorderColor: "#d99e1e ",
-          },
-        },
-      }}
-    >
-      <div className="px-3">
-        <Button block className="h-10 rounded-lg font-semibold mb-4">
-          <FaPlus />
-          Add Category
-        </Button>
-        <MainCategoryTable />
-      </div>
-    </ConfigProvider>
-  );
-}
-
-export default MainCategory;
-
-const MainCategoryTable = () => {
+const MainCategory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = (record) => {
-    setIsModalOpen(true); // Open modal
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
+  const showModal = (record = null) => {
+    setSelectedRecord(record);
+    setIsModalOpen(true);
   };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setSelectedRecord(null);
+  };
+
   const columns = [
+    { title: "Serial", dataIndex: "serial", key: "serial" },
     {
-      title: "Serial",
-      dataIndex: "serial",
-      key: "serial",
+      title: "Image",
+      dataIndex: "categoryImg",
+      key: "categoryImg",
+      render: (img) => <img src={img} alt="Category" style={{ width: 50 }} />,
     },
-    {
-      title: "Order Id",
-      dataIndex: "orderid",
-      key: "productname",
-    },
-    {
-      title: "Trnx Id",
-      dataIndex: "trnxid",
-      key: "trnxid",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Ammount",
-      dataIndex: "ammount",
-      key: "ammount",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
+    { title: "Category", dataIndex: "category", key: "category" },
     {
       title: "Action",
       key: "action",
@@ -86,7 +153,7 @@ const MainCategoryTable = () => {
           className="hover:text-[#a11d26]"
           onClick={(e) => {
             e.preventDefault();
-            showModal(record); // Pass row data
+            showModal(record);
           }}
         >
           <IoEye size={24} />
@@ -94,85 +161,78 @@ const MainCategoryTable = () => {
       ),
     },
   ];
+
   return (
-    <div>
-      <ConfigProvider
-        theme={{
-          components: {
-            Table: {
-              headerBg: "#575858",
-              headerSplitColor: "none",
-              headerColor: "white",
-              borderColor: "#A3A3A3",
-              colorBgContainer: "#3a3a3a",
-              rowHoverBg: "#4a4a4a",
-              colorText: "white",
-            },
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            defaultBg: "#d99e1e",
+            defaultColor: "black",
+            defaultBorderColor: "#d99e1e",
+            defaultHoverBg: "#d99e1e",
+            defaultHoverColor: "black",
+            defaultHoverBorderColor: "#d99e1e",
+            defaultActiveBg: "#d99e1e",
+            defaultActiveColor: "black",
+            defaultActiveBorderColor: "#d99e1e",
           },
-        }}
-      >
-        <div className="custom-table">
-          <Table columns={columns} dataSource={rawData} pagination />
-        </div>
-      </ConfigProvider>
-    </div>
+        },
+      }}
+    >
+      <div className="px-3">
+        {/* Add Category Button */}
+        <Button
+          block
+          className="h-10 rounded-lg font-semibold mb-4"
+          onClick={() => showModal()}
+        >
+          <FaPlus /> Add Category
+        </Button>
+
+        {/* Table */}
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: "#575858",
+                headerSplitColor: "none",
+                headerColor: "white",
+                borderColor: "#A3A3A3",
+                colorBgContainer: "#3a3a3a",
+                rowHoverBg: "#4a4a4a",
+                colorText: "white",
+              },
+            },
+          }}
+        >
+          <MainCategoryTable />
+        </ConfigProvider>
+
+        {/* Modal Component */}
+        <AddCategoryModal
+          isModalOpen={isModalOpen}
+          handleClose={handleClose}
+          record={selectedRecord}
+        />
+      </div>
+    </ConfigProvider>
   );
 };
+
+export default MainCategory;
 
 const rawData = [
   {
     key: "1",
     serial: "001",
-    orderid: 7858,
-    trnxid: "skdgflg45",
-    email: "test@gmail.com",
-    date: "2024-02-20",
-    ammount: "$25.99",
-    status: "Delivered",
-    pic: "https://via.placeholder.com/50",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Heavy Machineries",
   },
   {
     key: "2",
     serial: "002",
-    orderid: 7858,
-    trnxid: "skdgflg45",
-    email: "test@gmail.com",
-    date: "2024-02-18",
-    ammount: "$79.99",
-    status: "Pending",
-    pic: "https://via.placeholder.com/50",
-  },
-  {
-    key: "3",
-    serial: "003",
-    orderid: 7858,
-    trnxid: "skdgflg45",
-    email: "test@gmail.com",
-    date: "2024-02-15",
-    ammount: "$49.99",
-    status: "Shipped",
-    pic: "https://via.placeholder.com/50",
-  },
-  {
-    key: "4",
-    serial: "004",
-    orderid: 7858,
-    trnxid: "skdgflg45",
-    email: "test@gmail.com",
-    date: "2024-02-12",
-    ammount: "$129.99",
-    status: "Processing",
-    pic: "https://via.placeholder.com/50",
-  },
-  {
-    key: "5",
-    serial: "005",
-    orderid: 7858,
-    trnxid: "skdgflg45",
-    email: "test@gmail.com",
-    date: "2024-02-10",
-    ammount: "$299.99",
-    status: "Delivered",
-    pic: "https://via.placeholder.com/50",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Light Accessories",
   },
 ];
