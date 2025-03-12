@@ -29,6 +29,19 @@ textarea::placeholder {
   opacity: 0.5 !important;
 }
 
+/* faq */
+.ant-collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #808080;
+}
+
+span.anticon.anticon-right.ant-collapse-arrow {
+  margin-top: 15px;
+  font-size: 20px !important;
+  color: #808080 !important;
+}
 /* icon  */
 .ant-input-affix-wrapper .anticon.ant-input-password-icon {
   color: whitesmoke;
@@ -313,6 +326,16 @@ textarea::placeholder {
   height: 30px !important;
   border: none !important;
 }
+:where(.css-dev-only-do-not-override-y1v3s0).ant-select-outlined:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  height: 56px !important;
+}
+
 .anticon-check {
   color: #000;
 }

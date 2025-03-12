@@ -14,6 +14,7 @@
 //   const [products, setProducts] = useState(rawData); // State to hold the product list
 //   const [selectedProduct, setSelectedProduct] = useState(null);
 //   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+//   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
 //   const showEditModal = (product) => {
 //     setSelectedProduct(product);
@@ -57,7 +58,7 @@
 //     setIsDeleteModalOpen(true);
 //   };
 
-//   const searchableFields = columns(showDetailsModal).map(
+//   const searchableFields = columns(showEditModal, showDeleteModal).map(
 //     (col) => col.dataIndex
 //   );
 
@@ -141,7 +142,7 @@
 //         <div className="custom-table">
 //           <Table
 //             dataSource={dataSource}
-//             columns={columns(showEditModal)}
+//             columns={columns(showEditModal, showDeleteModal)}
 //             pagination={true}
 //           />
 //         </div>
@@ -153,7 +154,7 @@
 //         <DeleteModal
 //           isOpen={isDeleteModalOpen}
 //           onClose={() => setIsDeleteModalOpen(false)}
-//           onConfirm={() => deleteProduct(selectedProduct.key)}
+//           onConfirm={() => deleteProduct(selectedProduct?.key)}
 //         />
 //       </ConfigProvider>
 //     </div>
@@ -201,7 +202,7 @@
 //   },
 // ];
 
-// const columns = (showEditModal) => [
+// const columns = (showEditModal, showDeleteModal) => [
 //   {
 //     title: "Sl#",
 //     dataIndex: "serial",
@@ -276,7 +277,7 @@
 //         <button onClick={() => showEditModal(record)}>
 //           <FiEdit size={24} />
 //         </button>
-//         <button onClick={() => deleteProduct(record.key)}>
+//         <button onClick={() => showDeleteModal(record)}>
 //           <MdDeleteOutline size={25} className="text-red-600" />
 //         </button>
 //       </div>
@@ -307,23 +308,23 @@ function ProductList() {
     setIsModalOpen(true);
   };
 
-  const addOrUpdateProduct = (product) => {
-    setProducts((prevProducts) => {
-      const index = prevProducts.findIndex((p) => p.key === product.key);
-      if (index !== -1) {
-        // Update existing product
-        const updatedProducts = [...prevProducts];
-        updatedProducts[index] = product;
-        return updatedProducts;
-      } else {
-        // Add new product
-        return [...prevProducts, product];
-      }
-    });
-    setSelectedProduct(null);
-  };
-  const showModal = () => {
+  const showAddModal = () => {
+    setSelectedProduct(null); // Clear any selected product to ensure we're adding
     setIsModalOpen(true);
+  };
+
+  const addOrUpdateProduct = (product) => {
+    if (selectedProduct) {
+      // Update existing product
+      setProducts((prevProducts) =>
+        prevProducts.map((p) => (p.key === product.key ? product : p))
+      );
+    } else {
+      // Add new product
+      setProducts((prevProducts) => [...prevProducts, product]);
+    }
+    setSelectedProduct(null);
+    setIsModalOpen(false);
   };
 
   const showDetailsModal = (product) => {
@@ -365,11 +366,6 @@ function ProductList() {
     serial: `#${item.serial}`,
   }));
 
-  const addProduct = (newProduct) => {
-    // Adding new product to the state (and updating the table instantly)
-    setProducts((prevProducts) => [...prevProducts, newProduct]);
-  };
-
   return (
     <div className="px-3 py-4">
       <div className="text-white flex justify-between mb-4">
@@ -401,7 +397,7 @@ function ProductList() {
         </ConfigProvider>
         <button
           className="h-12 w-48 flex items-center text-sm justify-center gap-4 px-5 text-samba bg-sambaSD rounded-lg"
-          onClick={showModal}
+          onClick={showAddModal}
         >
           <FiPlusCircle size={22} />
           Add Product
@@ -435,7 +431,9 @@ function ProductList() {
         <AddProductModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          addProduct={addProduct} // Passing the addProduct function to the modal
+          addProduct={addOrUpdateProduct}
+          editProduct={addOrUpdateProduct}
+          editingProduct={selectedProduct}
         />
         <DeleteModal
           isOpen={isDeleteModalOpen}

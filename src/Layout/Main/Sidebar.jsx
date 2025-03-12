@@ -1,15 +1,18 @@
 import { Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHandHoldingDollar } from "react-icons/fa6";
+import { FaHandHoldingDollar, FaQuoteRight } from "react-icons/fa6";
 import { TbBellBolt, TbDashboard, TbListDetails } from "react-icons/tb";
 import { RxDashboard } from "react-icons/rx";
 import { BiCategoryAlt } from "react-icons/bi";
+
 import { FiLogOut, FiUsers } from "react-icons/fi";
 import { FaRegListAlt } from "react-icons/fa";
 import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri";
 import atlanticLogo from "../../assets/samba/atlanticLogo.png";
 import { LuBoxes } from "react-icons/lu";
+import { MdOutlinePermContactCalendar } from "react-icons/md";
+import { IoNewspaperOutline } from "react-icons/io5";
 
 const Sidebar = ({ isCollapsed }) => {
   const location = useLocation();
@@ -34,7 +37,7 @@ const Sidebar = ({ isCollapsed }) => {
       ),
     },
     {
-      key: "subMenuSetting1",
+      key: "subMenuSetting2",
       icon: <BiCategoryAlt size={25} />,
       label: isCollapsed ? null : "Manage Category",
       children: isCollapsed
@@ -107,6 +110,15 @@ const Sidebar = ({ isCollapsed }) => {
       ),
     },
     {
+      key: "/faq",
+      icon: <FaQuoteRight size={25} />,
+      label: isCollapsed ? (
+        <Link to="/faq">Faq</Link>
+      ) : (
+        <Link to="/faq">Faq</Link>
+      ),
+    },
+    {
       key: "subMenuSetting1",
       icon: <RiSettings5Line size={25} />,
       label: isCollapsed ? null : "Settings",
@@ -130,6 +142,24 @@ const Sidebar = ({ isCollapsed }) => {
                 </Link>
               ),
             },
+            {
+              key: "/terms-and-conditons",
+              icon: <IoNewspaperOutline size={24} />,
+              label: (
+                <Link to="/terms-and-conditons" className="text-white">
+                  Terms and Conditions
+                </Link>
+              ),
+            },
+            {
+              key: "/about-us",
+              icon: <MdOutlinePermContactCalendar size={24} />,
+              label: (
+                <Link to="/about-us" className="text-white">
+                  About Us
+                </Link>
+              ),
+            },
           ]
         : [
             {
@@ -147,6 +177,24 @@ const Sidebar = ({ isCollapsed }) => {
               label: (
                 <Link to="/privacy-policy" className="text-white">
                   Privacy Policy
+                </Link>
+              ),
+            },
+            {
+              key: "/terms-and-conditons",
+              icon: <IoNewspaperOutline size={24} />,
+              label: (
+                <Link to="/terms-and-conditons" className="text-white">
+                  Terms and Conditions
+                </Link>
+              ),
+            },
+            {
+              key: "/about-us",
+              icon: <MdOutlinePermContactCalendar size={24} />,
+              label: (
+                <Link to="/about-us" className="text-white">
+                  About Us
                 </Link>
               ),
             },
@@ -177,7 +225,7 @@ const Sidebar = ({ isCollapsed }) => {
         to="/"
         className="flex items-center justify-center py-4 text-white mt-10"
       >
-        <div className="w-full flex items-center justify-center px-4 py-3 gap-3 rounded-lg">
+        <div className="w-full flex text-green-600 items-center justify-center px-4 py-3 gap-3 rounded-lg">
           {/* <TbDashboard size={30} className="text-white" />
           {!isCollapsed && <p className="text-xl font-semibold">Dashboard</p>} */}
           <img src={atlanticLogo} />

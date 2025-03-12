@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, ConfigProvider } from "antd";
+import { Modal, Form, Input, ConfigProvider, Select } from "antd";
 import UploadComponent from "./UploadComponent";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 
 function AddProductModal({
   isModalOpen,
@@ -80,6 +81,34 @@ function AddProductModal({
             {/* Left Section */}
             <div className="w-1/2">
               <Form.Item
+                label="Category"
+                name="productCategory"
+                rules={[{ required: true, message: "Category required!" }]}
+              >
+                <Select
+                  // className="flex items-center gap-2  w-40 border rounded-md"
+                  className="bg-[#1f1f1f] border-none h-12 text-slate-300 flex items-center rounded-md"
+                  suffixIcon={
+                    <MdOutlineArrowDropDown size={25} className="text-white" />
+                  }
+                  placeholder="Select a person"
+                  options={[
+                    {
+                      value: "1",
+                      label: "Jack",
+                    },
+                    {
+                      value: "2",
+                      label: "Lucy",
+                    },
+                    {
+                      value: "3",
+                      label: "Tom",
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item
                 label="Product Name"
                 name="productName"
                 rules={[{ required: true, message: "Product Name required!" }]}
@@ -89,25 +118,15 @@ function AddProductModal({
                   className="bg-[#1f1f1f] border-none h-12 text-slate-300"
                 />
               </Form.Item>
-
               <Form.Item
-                label="Category"
-                name="productCategory"
-                rules={[{ required: true, message: "Category required!" }]}
+                label="Capacity"
+                name="productCapacity"
+                rules={[
+                  { required: true, message: "Product Capacity required!" },
+                ]}
               >
                 <Input
-                  placeholder="Enter product category"
-                  className="bg-[#1f1f1f] border-none h-12 text-slate-300"
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Sub-category"
-                name="productSubCategory"
-                rules={[{ required: true, message: "Sub-category required!" }]}
-              >
-                <Input
-                  placeholder="Enter product sub-category"
+                  placeholder="Enter product capacity"
                   className="bg-[#1f1f1f] border-none h-12 text-slate-300"
                 />
               </Form.Item>
@@ -145,6 +164,38 @@ function AddProductModal({
             {/* Right Section */}
             <div className="w-1/2">
               <Form.Item
+                label="Sub-category"
+                name="productSubCategory"
+                rules={[{ required: true, message: "Sub-category required!" }]}
+              >
+                {/* <Input
+                  placeholder="Enter product sub-category"
+                  className="bg-[#1f1f1f] border-none h-12 text-slate-300"
+                /> */}
+                <Select
+                  // className="flex items-center gap-2  w-40 border rounded-md"
+                  className="bg-[#1f1f1f] border-none h-12 text-slate-300 flex items-center rounded-md"
+                  suffixIcon={
+                    <MdOutlineArrowDropDown size={25} className="text-white" />
+                  }
+                  placeholder="Select a person"
+                  options={[
+                    {
+                      value: "1",
+                      label: "Jack",
+                    },
+                    {
+                      value: "2",
+                      label: "Lucy",
+                    },
+                    {
+                      value: "3",
+                      label: "Tom",
+                    },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item
                 label="Product Price"
                 name="productPrice"
                 rules={[{ required: true, message: "Product Price required!" }]}
@@ -155,19 +206,6 @@ function AddProductModal({
                   onInput={(e) =>
                     (e.target.value = e.target.value.replace(/[^0-9.]/g, ""))
                   }
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Capacity"
-                name="productCapacity"
-                rules={[
-                  { required: true, message: "Product Capacity required!" },
-                ]}
-              >
-                <Input
-                  placeholder="Enter product capacity"
-                  className="bg-[#1f1f1f] border-none h-12 text-slate-300"
                 />
               </Form.Item>
 

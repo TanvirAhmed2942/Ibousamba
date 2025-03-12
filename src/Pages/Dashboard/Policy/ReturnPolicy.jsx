@@ -68,7 +68,7 @@ function ReturnPolicy() {
         }}
       />
       <button
-        className="w-full bg-quilocoD hover:bg-quilocoD/90 text-white text-[24px] rounded-lg h-12 my-4"
+        className="w-full bg-samba hover:bg-samba/90 text-white text-[24px] rounded-lg h-12 my-4"
         onClick={() => console.log(content)}
       >
         Save

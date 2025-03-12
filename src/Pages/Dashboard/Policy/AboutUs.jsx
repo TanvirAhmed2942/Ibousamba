@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 
-function PrivacyPolicy() {
+function AboutUs() {
   const editor = useRef(null);
-  const [content, setContent] = useState("Privacy Policy");
+  const [content, setContent] = useState("");
 
   const handleUpdate = (newContent) => {
     setContent(newContent);
@@ -21,6 +21,7 @@ function PrivacyPolicy() {
             background: "#000",
             color: "#ccc",
           },
+          statusbar: false,
           showCharsCounter: false,
           showWordsCounter: false,
           toolbarAdaptive: true,
@@ -28,7 +29,6 @@ function PrivacyPolicy() {
           enableDragAndDropFileToEditor: true,
           allowResizeX: false,
           allowResizeY: false,
-          statusbar: false,
           // Reduce button count to improve performance
           buttons: [
             "source",
@@ -77,4 +77,4 @@ function PrivacyPolicy() {
   );
 }
 
-export default PrivacyPolicy;
+export default AboutUs;

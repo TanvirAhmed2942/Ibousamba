@@ -22,6 +22,10 @@ import Notifications from "../Pages/Dashboard/Notification/Notifications.jsx";
 import MainCategory from "../Pages/Dashboard/ManageCategory/MainCategory/MainCategory.jsx";
 import SubCategory from "../Pages/Dashboard/ManageCategory/SubCategory/SubCategory.jsx";
 
+import TermsAndCondition from "../Pages/Dashboard/Policy/TermsAndCondition.jsx";
+import AboutUs from "../Pages/Dashboard/Policy/AboutUs.jsx";
+import Faq from "../Pages/Dashboard/Faq/Faq.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,12 +61,24 @@ const router = createBrowserRouter([
         element: <ReturnPolicy />,
       },
       {
+        path: "/terms-and-conditons",
+        element: <TermsAndCondition />,
+      },
+      {
+        path: "/about-us",
+        element: <AboutUs />,
+      },
+      {
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
       },
       {
         path: "/profile",
         element: <AdminProfile />,
+      },
+      {
+        path: "/faq",
+        element: <Faq />,
       },
       {
         path: "/notification",
