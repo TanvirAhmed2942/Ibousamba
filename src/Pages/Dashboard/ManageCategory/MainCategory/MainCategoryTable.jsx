@@ -89,7 +89,17 @@ const MainCategoryTable = () => {
         }}
       >
         <div className="custom-table">
-          <Table columns={columns} dataSource={rawData} pagination />
+          <Table
+            columns={columns}
+            dataSource={rawData}
+            pagination={{
+              // onChange: cancel,
+              defaultPageSize: 5,
+              position: ["bottomRight"],
+              size: "default",
+              total: 50,
+            }}
+          />
         </div>
       </ConfigProvider>
 
@@ -118,6 +128,30 @@ const rawData = [
   },
   {
     key: "2",
+    serial: "002",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Light Accessories",
+  },
+  {
+    key: "3",
+    serial: "001",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Heavy Machineries",
+  },
+  {
+    key: "4",
+    serial: "002",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Light Accessories",
+  },
+  {
+    key: "5",
+    serial: "001",
+    categoryImg: "https://via.placeholder.com/50",
+    category: "Heavy Machineries",
+  },
+  {
+    key: "6",
     serial: "002",
     categoryImg: "https://via.placeholder.com/50",
     category: "Light Accessories",

@@ -55,10 +55,11 @@ const Header = ({ toggleSidebar }) => {
           <div className="relative border rounded-full p-2 cursor-pointer">
             <FaRegBell size={24} color="white" />
             <Badge
+              color="blue"
               count={10}
               overflowCount={5}
               size="small"
-              className="absolute top-1 -right-0"
+              className="absolute top-1 -right-0 "
             />
           </div>
         </Popover>

@@ -44,7 +44,7 @@ const Notifications = () => {
             >
               <FaRegBell
                 size={50}
-                className="text-quilocoD bg-[#00000033] p-2 rounded-md"
+                className="text-samba bg-[#00000033] p-2 rounded-md"
               />
               <div>
                 <p>Your order is Confirmed. Thank you, shop again!</p>

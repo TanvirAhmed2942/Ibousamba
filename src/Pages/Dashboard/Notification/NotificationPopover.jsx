@@ -8,12 +8,12 @@ function NotificationPopover() {
       theme={{
         components: {
           Button: {
-            defaultBg: "#a11d26 ",
+            defaultBg: "#d99e1e ",
             defaultColor: "#ffffff ",
-            defaultHoverBg: "#a11d26 ",
+            defaultHoverBg: "#d99e1e ",
             defaultHoverColor: "#ffffff ",
-            defaultHoverBorderColor: "#a11d26 ",
-            defaultActiveBg: "#a11d26 ",
+            defaultHoverBorderColor: "#d99e1e ",
+            defaultActiveBg: "#d99e1e ",
             defaultActiveColor: "#ffffff ",
             defaultActiveBorderColor: "none",
           },
