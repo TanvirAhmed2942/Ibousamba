@@ -23,7 +23,7 @@
 //     },
 //   ]); // Default FAQs state
 
-// const handleAddFaq = (faq) => {
+//   const handleAddFaq = (faq) => {
 //     setFaqs((prevFaqs) => [...prevFaqs, faq]); // Add new FAQ to the list
 //     setIsModalOpen(false); // Close the modal after saving
 //   };
@@ -104,7 +104,7 @@ import { Button, Collapse, ConfigProvider } from "antd";
 import AddFaqModal from "./AddFaqModal";
 
 function Faq() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for managing modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [faqs, setFaqs] = useState([
     {
       key: "1",
@@ -121,25 +121,15 @@ function Faq() {
       question: "What is Ant Design?",
       answer: "Ant Design is a design system and React UI framework.",
     },
-  ]); // Default FAQs state with keys
+  ]);
 
   const handleAddFaq = (faq) => {
-    // Add new FAQ to the list with a unique key
     const newFaq = {
       ...faq,
-      key: String(faqs.length + 1),
+      key: String(Date.now()), // Unique key
     };
     setFaqs((prevFaqs) => [...prevFaqs, newFaq]);
-    setIsModalOpen(false); // Close the modal after saving
-  };
-
-  // Create items array for Collapse component from faqs state
-  const generateCollapseItems = () => {
-    return faqs.map((faq) => ({
-      key: faq.key,
-      label: <p>{faq.question}</p>,
-      children: <p className="text-black">{faq.answer}</p>,
-    }));
+    setIsModalOpen(false);
   };
 
   return (
@@ -152,7 +142,7 @@ function Faq() {
               defaultActiveBg: "#3a3936",
               defaultActiveColor: "#d99e1e",
               defaultHoverBg: "#3a3936",
-              defaultHoverColor: "#d99e1e ",
+              defaultHoverColor: "#d99e1e",
             },
           },
         }}
@@ -162,15 +152,25 @@ function Faq() {
             onClick={() => setIsModalOpen(true)}
             className="text-samba text-sm h-9 rounded-lg border-none bg-sambaSD px-5"
           >
-            Add Faq
+            Add FAQ
           </Button>
         </div>
-        <div className="flex flex-col gap-2 ">
-          <Collapse
-            className="bg-[#1b1b1b]"
-            expandIconPosition="end"
-            items={generateCollapseItems()}
-          />
+        <div className="flex flex-col gap-2">
+          {/* Render a new Collapse component for each FAQ */}
+          {faqs.map((faq) => (
+            <Collapse
+              key={faq.key}
+              className="bg-[#1b1b1b]"
+              expandIconPosition="end"
+              items={[
+                {
+                  key: faq.key,
+                  label: <p>{faq.question}</p>,
+                  children: <p className="text-black">{faq.answer}</p>,
+                },
+              ]}
+            />
+          ))}
           <AddFaqModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
