@@ -343,7 +343,15 @@ span.anticon.anticon-right.ant-collapse-arrow {
 .ant-select-arrow {
   color: black !important;
 }
-
+:where(
+    .css-dev-only-do-not-override-540ly6
+  ).ant-select-single.ant-select-show-arrow
+  .ant-select-selection-item {
+  color: #232323;
+}
+.ant-select-single.ant-select-open .ant-select-selection-item {
+  color: #000;
+}
 .ant-select-selector {
   height: 30px !important;
   border: none !important;

@@ -9,6 +9,7 @@ import {
   Upload,
   Select,
 } from "antd";
+import { BiCloudUpload } from "react-icons/bi";
 
 const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
   const [fileList, setFileList] = useState([]);
@@ -52,6 +53,11 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
           Input: {
             hoverBorderColor: "none",
             activeBorderColor: "none",
+          },
+          Select: {
+            selectorBg: "white",
+
+            optionSelectedColor: "red",
           },
         },
       }}
@@ -101,7 +107,10 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
             >
               {fileList.length >= 1 ? null : (
                 <div className="w-full flex items-center justify-center">
-                  <div style={{ marginTop: 8 }}>Upload</div>
+                  <div className="text-black flex flex-col items-center ">
+                    <BiCloudUpload size={25} />
+                    Upload
+                  </div>
                 </div>
               )}
             </Upload>
