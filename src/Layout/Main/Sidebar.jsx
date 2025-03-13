@@ -10,6 +10,7 @@ import { FiLogOut, FiUsers } from "react-icons/fi";
 import { FaRegListAlt } from "react-icons/fa";
 import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri";
 import atlanticLogo from "../../assets/samba/atlanticLogo.png";
+import brand from "../../assets/samba/brand.png";
 import { LuBoxes } from "react-icons/lu";
 import { MdOutlinePermContactCalendar } from "react-icons/md";
 import { IoNewspaperOutline } from "react-icons/io5";
@@ -89,6 +90,15 @@ const Sidebar = ({ isCollapsed }) => {
         <Link to="/products"></Link>
       ) : (
         <Link to="/products">Products</Link>
+      ),
+    },
+    {
+      key: "/all-brands",
+      icon: <img src={brand} width={25} />,
+      label: isCollapsed ? (
+        <Link to="/all-brands"></Link>
+      ) : (
+        <Link to="/all-brands">Brands</Link>
       ),
     },
     {

@@ -91,19 +91,47 @@ function AddProductModal({
                   suffixIcon={
                     <MdOutlineArrowDropDown size={25} className="text-white" />
                   }
-                  placeholder="Select a person"
+                  placeholder="Select a Category"
                   options={[
                     {
                       value: "1",
-                      label: "Jack",
+                      label: "All Terrain vehicle",
                     },
                     {
                       value: "2",
-                      label: "Lucy",
+                      label: "Articulated Dump truck Compactors",
                     },
                     {
                       value: "3",
-                      label: "Tom",
+                      label: "Construction",
+                    },
+                    {
+                      value: "4",
+                      label: "Cranes",
+                    },
+                    {
+                      value: "5",
+                      label: "Dozers",
+                    },
+                    {
+                      value: "6",
+                      label: "Drills Excavators Front shovels",
+                    },
+                    {
+                      value: "7",
+                      label: "Loader Backhoes",
+                    },
+                    {
+                      value: "8",
+                      label: "Loaders",
+                    },
+                    {
+                      value: "9",
+                      label: "Moto Graders",
+                    },
+                    {
+                      value: "10",
+                      label: "Generator sets",
                     },
                   ]}
                 />
@@ -178,19 +206,27 @@ function AddProductModal({
                   suffixIcon={
                     <MdOutlineArrowDropDown size={25} className="text-white" />
                   }
-                  placeholder="Select a person"
+                  placeholder="Select a Sub-category"
                   options={[
                     {
                       value: "1",
-                      label: "Jack",
+                      label: "Articulated dump truck",
                     },
                     {
                       value: "2",
-                      label: "Lucy",
+                      label: "Dozers",
                     },
                     {
                       value: "3",
-                      label: "Tom",
+                      label: "Drills",
+                    },
+                    {
+                      value: "3",
+                      label: "Rock truck",
+                    },
+                    {
+                      value: "4",
+                      label: "Water wagon ",
                     },
                   ]}
                 />

@@ -112,7 +112,14 @@ span.anticon.anticon-right.ant-collapse-arrow {
 }
 .ant-menu-submenu-title:hover {
   background-color: #292929 !important;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
 }
+.ant-menu-submenu-title {
+  border-top-left-radius: 50px !important;
+  border-bottom-left-radius: 50px !important;
+}
+
 .ant-menu-item .ant-menu-item-selected {
   background-color: #292929 !important;
   color: #ffffff !important;
@@ -310,8 +317,9 @@ span.anticon.anticon-right.ant-collapse-arrow {
   font-size: larger;
 }
 .ant-select-selection-item {
-  color: black !important;
+  color: white;
 }
+
 .ant-select-selection-item-remove {
   color: white !important;
 }

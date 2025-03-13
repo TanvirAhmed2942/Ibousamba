@@ -7,10 +7,9 @@ import {
   Button,
   Image,
   Upload,
-  Select,
 } from "antd";
-
-const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
+import { LiaCloudUploadAltSolid } from "react-icons/lia";
+const AddBrandModal = ({ isModalOpen, handleClose }) => {
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -38,9 +37,7 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
       reader.onerror = (error) => reject(error);
     });
   };
-  const handleSelect = (value) => {
-    console.log(`selected ${value}`);
-  };
+
   return (
     <ConfigProvider
       theme={{
@@ -53,45 +50,30 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
             hoverBorderColor: "none",
             activeBorderColor: "none",
           },
+          Button: {
+            defaultBg: "#d99e1e",
+            defaultColor: "black",
+            defaultBorderColor: "#d99e1e",
+            defaultHoverBg: "#d99e1e",
+            defaultHoverColor: "black",
+            defaultHoverBorderColor: "#d99e1e",
+            defaultActiveBg: "#d99e1e",
+            defaultActiveColor: "black",
+            defaultActiveBorderColor: "#d99e1e",
+          },
         },
       }}
     >
       <Modal
-        title="Sub Category Details"
+        title="Add New Brand"
         open={isModalOpen}
         onCancel={handleClose}
         footer={null}
         closable
       >
-        <Form layout="vertical" className="flex flex-col ">
+        <Form layout="vertical" className="flex flex-col gap-1">
           {/* Upload Component with white background */}
-          <Form.Item name="categoryName">
-            <div className="flex gap-2 mt-2 ">
-              <p className="text-sm text-black">Select Category</p>
-              <Select
-                defaultValue="lucy"
-                style={{
-                  width: 120,
-                }}
-                onChange={handleSelect}
-                options={[
-                  {
-                    value: "jack",
-                    label: "Jack",
-                  },
-                  {
-                    value: "lucy",
-                    label: "Lucy",
-                  },
-                  {
-                    value: "Yiminghe",
-                    label: "yiminghe",
-                  },
-                ]}
-              />
-            </div>
-          </Form.Item>
-          <Form.Item>
+          <Form.Item label="Brand Image" required>
             <Upload
               action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
               listType="picture-card"
@@ -101,7 +83,10 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
             >
               {fileList.length >= 1 ? null : (
                 <div className="w-full flex items-center justify-center">
-                  <div style={{ marginTop: 8 }}>Upload</div>
+                  <div className="mt-2 text-black flex flex-col items-center">
+                    <LiaCloudUploadAltSolid size={25} />
+                    Upload
+                  </div>
                 </div>
               )}
             </Upload>
@@ -127,12 +112,12 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
 
           {/* Category Name Form */}
           <Form.Item
-            label="Sub-Category Name"
-            name="subCategoryName"
+            label="Brand Url Link"
+            name="brandUrl"
             rules={[
               {
                 required: true,
-                message: "Enter your Category Name",
+                message: "Enter your Brand Link",
               },
             ]}
           >
@@ -151,4 +136,4 @@ const AddSubCategoryModal = ({ isModalOpen, handleClose, record }) => {
   );
 };
 
-export default AddSubCategoryModal;
+export default AddBrandModal;

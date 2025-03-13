@@ -25,6 +25,7 @@ import SubCategory from "../Pages/Dashboard/ManageCategory/SubCategory/SubCatego
 import TermsAndCondition from "../Pages/Dashboard/Policy/TermsAndCondition.jsx";
 import AboutUs from "../Pages/Dashboard/Policy/AboutUs.jsx";
 import Faq from "../Pages/Dashboard/Faq/Faq.jsx";
+import Brands from "../Pages/Dashboard/Brands/Brands.jsx";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,11 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <AdminProfile />,
       },
+      {
+        path: "/all-brands",
+        element: <Brands />,
+      },
+
       {
         path: "/faq",
         element: <Faq />,
