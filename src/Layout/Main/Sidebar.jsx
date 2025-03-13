@@ -240,7 +240,7 @@ const Sidebar = ({ isCollapsed }) => {
                     [&::-webkit-scrollbar-thumb]:rounded-full
                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                     dark:[&::-webkit-scrollbar-track]:bg-neutral-700
-                    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 ${
+                    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 ml-4 ${
                       isCollapsed ? "w-[80px]" : "w-[280px]"
                     }`}
     >
@@ -266,7 +266,13 @@ const Sidebar = ({ isCollapsed }) => {
         to="/auth/login"
         className="text-sm text-red-600 flex items-center border border-transparent gap-2 mt-40 hover:border hover:border-red-600 rounded-lg px-3 py-1"
       >
-        <FiLogOut size={25} /> Log Out
+        {isCollapsed ? (
+          <FiLogOut size={25} />
+        ) : (
+          <div className="flex gap-2">
+            <FiLogOut size={25} /> Log Out
+          </div>
+        )}
       </Link>
     </div>
   );

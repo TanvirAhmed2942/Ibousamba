@@ -1,9 +1,7 @@
 import React from "react";
 import { Modal, ConfigProvider } from "antd";
-import { SlCalender } from "react-icons/sl";
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
-function InquiryDetailsModal({ isModalOpen, setIsModalOpen }) {
+function InquiryDetailsModal({ isModalOpen, setIsModalOpen, inquiryData }) {
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -30,7 +28,6 @@ function InquiryDetailsModal({ isModalOpen, setIsModalOpen }) {
       }}
     >
       <Modal
-        // title="View Details"
         open={isModalOpen}
         onOk={handleOk}
         width={500}
@@ -40,27 +37,60 @@ function InquiryDetailsModal({ isModalOpen, setIsModalOpen }) {
       >
         <div className="w-full flex flex-col items-center my-8">
           <h1 className="w-full mb-8 flex items-center justify-center text-white text-2xl font-sans">
-            Transaction Details
+            Inquiry Details
           </h1>
-          <div className="flex flex-col items-center justify-center w-full h-24 gap-2 ">
-            <div className="w-[80%] flex items-center justify-between ">
-              <p>Transaction ID: </p>
-              <p>#12345678</p>
+          {inquiryData ? (
+            <div className="text-white w-full">
+              <div className="flex mb-2">
+                <div className="w-32 font-bold flex justify-between mr-6">
+                  <span>Serial</span>
+                  <span>:</span>
+                </div>
+                <div>{inquiryData.serial}</div>
+              </div>
+              <div className="flex mb-2">
+                <div className="w-32 font-bold flex justify-between mr-6">
+                  <span>Fuull Name</span>
+                  <span>:</span>
+                </div>
+                <div>{inquiryData.fullName}</div>
+              </div>
+              <div className="flex mb-2">
+                <div className="w-32 font-bold flex justify-between mr-6">
+                  <span>Email</span>
+                  <span>:</span>
+                </div>
+                <div>{inquiryData.userEmail}</div>
+              </div>
+              <div className="flex mb-2">
+                <div className="w-32 font-bold flex justify-between mr-6">
+                  {" "}
+                  <span>Inquiry Topics</span>
+                  <span>:</span>
+                </div>
+                <div>{inquiryData.inquiryTopics}</div>
+              </div>
+              <div className="flex mb-2">
+                <div className="w-32 font-bold flex justify-between mr-6">
+                  {" "}
+                  <span>Phone Number</span>
+                  <span>:</span>
+                </div>
+                <div>{inquiryData.phoneNumber}</div>
+              </div>
+              <div className="flex mb-2 ">
+                <div className="min-w-32 font-bold flex justify-between mr-6">
+                  <span>Your Inquiry</span>
+                  <span>:</span>
+                </div>
+                <div className=" min-w-20 h-auto text-wrap">
+                  {inquiryData.yourInquiry}
+                </div>
+              </div>
             </div>
-            <div className="w-[80%] flex items-center justify-between  ">
-              <p>Date: </p>
-              <p>01-24-2024</p>
-            </div>
-            <div className="w-[80%] flex items-center justify-between  ">
-              <p>Email: </p>
-              <p>email@gmail.com</p>
-            </div>
-
-            <div className="w-[80%] flex items-center justify-between ">
-              <p>Transaction amount: </p>
-              <p>$260</p>
-            </div>
-          </div>
+          ) : (
+            <p className="text-white">No inquiry data selected</p>
+          )}
         </div>
       </Modal>
     </ConfigProvider>

@@ -204,7 +204,9 @@ span.anticon.anticon-right.ant-collapse-arrow {
 .jodit-workplace {
   height: 550px !important;
 }
-
+.ant-menu .ant-menu-submenu-title {
+  margin-left: 5px !important;
+}
 .ant-menu-item-icon {
   color: white !important;
 }
