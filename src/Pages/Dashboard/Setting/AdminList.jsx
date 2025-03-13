@@ -178,6 +178,12 @@ const AdminList = () => {
               labelFontSize: 16,
               labelColor: "#ffffff",
             },
+            Input: {
+              colorBgBase: "#1f1f1f",
+              colorBgContainer: "#1f1f1f",
+              colorBorder: "transparent",
+              boxShadow: "none",
+            },
           },
         }}
       >
@@ -195,12 +201,7 @@ const AdminList = () => {
             >
               <Input
                 placeholder="Name"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <Form.Item
@@ -230,28 +231,18 @@ const AdminList = () => {
             >
               <Input
                 placeholder="Email"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <Form.Item
-              label="Role"
+              label="Role (Auto Complete)"
               name="role"
-              rules={[{ required: true, message: "Please enter Role" }]}
+              // rules={[{ required: true, message: "Please enter Role" }]}
             >
               <Input
-                disabled={true}
+                // disabled={true}
                 placeholder="Role"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <Form.Item
@@ -261,12 +252,7 @@ const AdminList = () => {
             >
               <Input.Password
                 placeholder="**********"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <div className="flex justify-end gap-4 mt-4">
@@ -301,6 +287,12 @@ const AdminList = () => {
               activeBorderColor: "grey",
               hoverBorderColor: "grey",
             },
+            Input: {
+              colorBgBase: "#1f1f1f",
+              colorBgContainer: "#1f1f1f",
+              colorBorder: "transparent",
+              boxShadow: "none",
+            },
           },
         }}
       >
@@ -321,12 +313,7 @@ const AdminList = () => {
             >
               <Input
                 placeholder="Name"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <Form.Item
@@ -356,12 +343,7 @@ const AdminList = () => {
             >
               <Input
                 placeholder="Email"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
             <Form.Item
@@ -370,14 +352,10 @@ const AdminList = () => {
               rules={[{ required: true, message: "Please enter Role" }]}
             >
               <Input
-                disabled={true}
+                // disabled={true}
+
                 placeholder="Role"
-                className="h-12 text-slate-50 hover:border-slate-300 focus:ring-0 focus:outline-none"
-                style={{
-                  backgroundColor: "black", // Ensures background stays black
-                  color: "white",
-                  border: "1px solid #555",
-                }}
+                className="h-10 bg-[#1f1f1f] border-none border text-slate-300 hover:border-slate-300 focus:ring-0 focus:outline-none"
               />
             </Form.Item>
 

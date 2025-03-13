@@ -1,13 +1,13 @@
 import React from "react";
-import { FaBoxOpen, FaCannabis } from "react-icons/fa6";
+import { FaBoxOpen, FaFolderOpen } from "react-icons/fa6";
 import TotalOrderList from "./TotalOrderList";
 import Inquiry from "./Inquiry";
 
 const stats = [
   {
-    label: "Total Inquery",
+    label: "Total Inquiry",
     value: "518",
-    icon: <FaCannabis size={60} className="text-white" />,
+    icon: <FaFolderOpen size={60} className="text-white" />,
     bg: "bg-quilocoS",
   },
   {

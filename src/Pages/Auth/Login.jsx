@@ -13,7 +13,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="w-[55%]">
       <div className="text-center mb-8">
         <h1 className="text-[25px] text-white font-semibold mb-1">
           Login to Account
@@ -24,6 +24,16 @@ const Login = () => {
       </div>
       <ConfigProvider
         theme={{
+          components: {
+            Input: {
+              colorBgBase: "white",
+              colorBgContainer: "#1f1f1f",
+              // colorBorder: "transparent",
+              hoverBorderColor: "white",
+              activeBorderColor: "wgite",
+              boxShadow: "none",
+            },
+          },
           token: {
             colorText: "white",
           },
@@ -46,13 +56,7 @@ const Login = () => {
           >
             <Input
               placeholder={`Enter Your email`}
-              style={{
-                height: 45,
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                background: "#18191b",
-              }}
+              className="h-10 border rounded-lg outline-none text-white bg-sambaS"
             />
           </Form.Item>
 
@@ -69,13 +73,7 @@ const Login = () => {
             <Input.Password
               type="password"
               placeholder="Enter your password"
-              style={{
-                height: 45,
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
-                background: "#18191b",
-              }}
+              className="h-10 border rounded-lg outline-none text-white bg-sambaS"
             />
           </Form.Item>
 
@@ -109,7 +107,7 @@ const Login = () => {
 
                 marginTop: 20,
               }}
-              className="flex items-center justify-center bg-quilocoD hover:bg-quilocoD/90 rounded-lg text-base"
+              className="flex items-center justify-center bg-samba hover:bg-samba/90 rounded-lg text-base"
             >
               {/* {isLoading? < Spinner/> : "Sign in"} */} Sign in
             </button>

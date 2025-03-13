@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 const Auth = () => {
   return (
     <div
-      className="w-full flex items-center justify-center relative"
+      className="w-full h-full flex items-center justify-center relative"
       style={{
         height: "100vh",
       }}
@@ -13,7 +13,7 @@ const Auth = () => {
       <div
         style={{
           //   backgroundImage: `url('${backgroundImage}')`,
-          backgroundColor: "#18191b ",
+          backgroundColor: "#292929 ",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -28,15 +28,16 @@ const Auth = () => {
       ></div>
 
       <div
+        className="flex items-center justify-center"
         style={{
-          background: "#232323",
+          background: "#292929",
           padding: 30,
           borderRadius: 10,
-          width: 510,
+          width: 1000,
           position: "relative",
           zIndex: 2,
         }}
-        className="shadow-xl"
+        // className="shadow-xl"
       >
         <Outlet />
       </div>

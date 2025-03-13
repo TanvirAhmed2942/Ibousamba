@@ -3,7 +3,7 @@ import { Modal, ConfigProvider } from "antd";
 import { SlCalender } from "react-icons/sl";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 
-function TransactionDetailsModal({ isModalOpen, setIsModalOpen }) {
+function InquiryDetailsModal({ isModalOpen, setIsModalOpen }) {
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -67,4 +67,4 @@ function TransactionDetailsModal({ isModalOpen, setIsModalOpen }) {
   );
 }
 
-export default TransactionDetailsModal;
+export default InquiryDetailsModal;

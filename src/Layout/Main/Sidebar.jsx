@@ -1,19 +1,24 @@
 import { Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHandHoldingDollar, FaQuoteRight } from "react-icons/fa6";
+import {
+  FaClipboardList,
+  FaHandHoldingDollar,
+  FaQuoteRight,
+} from "react-icons/fa6";
 import { TbBellBolt, TbDashboard, TbListDetails } from "react-icons/tb";
 import { RxDashboard } from "react-icons/rx";
 import { BiCategoryAlt } from "react-icons/bi";
 
 import { FiLogOut, FiUsers } from "react-icons/fi";
-import { FaRegListAlt } from "react-icons/fa";
+import { FaCodeBranch, FaRegListAlt } from "react-icons/fa";
 import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri";
 import atlanticLogo from "../../assets/samba/atlanticLogo.png";
 import brand from "../../assets/samba/brand.png";
 import { LuBoxes } from "react-icons/lu";
 import { MdOutlinePermContactCalendar } from "react-icons/md";
 import { IoNewspaperOutline } from "react-icons/io5";
+import { GrLocationPin } from "react-icons/gr";
 
 const Sidebar = ({ isCollapsed }) => {
   const location = useLocation();
@@ -45,7 +50,7 @@ const Sidebar = ({ isCollapsed }) => {
         ? [
             {
               key: "/main-category",
-              icon: <FaHandHoldingDollar size={24} />,
+              icon: <GrLocationPin size={24} />,
               label: (
                 <Link to="/main-category" className="text-white">
                   Main Category
@@ -54,7 +59,7 @@ const Sidebar = ({ isCollapsed }) => {
             },
             {
               key: "/sub-category",
-              icon: <FaRegListAlt size={24} />,
+              icon: <FaCodeBranch size={24} />,
               label: (
                 <Link to="/sub-category" className="text-white">
                   Sub Category
@@ -64,8 +69,8 @@ const Sidebar = ({ isCollapsed }) => {
           ]
         : [
             {
-              key: "//main-category",
-              icon: <FaHandHoldingDollar size={24} />,
+              key: "/main-category",
+              icon: <GrLocationPin size={24} />,
               label: (
                 <Link to="/main-category" className="text-white">
                   Main Category
@@ -74,7 +79,7 @@ const Sidebar = ({ isCollapsed }) => {
             },
             {
               key: "/sub-category",
-              icon: <FaRegListAlt size={24} />,
+              icon: <FaCodeBranch size={24} />,
               label: (
                 <Link to="/sub-category" className="text-white">
                   Sub Category
@@ -101,39 +106,32 @@ const Sidebar = ({ isCollapsed }) => {
         <Link to="/all-brands">Brands</Link>
       ),
     },
+
     {
-      key: "/order-management",
-      icon: <TbListDetails size={25} />,
+      key: "/inquiry",
+      icon: <FaClipboardList size={25} />,
       label: isCollapsed ? (
-        <Link to="/order-management">Order Management</Link>
+        <Link to="/inquiry">Inquiry</Link>
       ) : (
-        <Link to="/order-management">Order Management</Link>
+        <Link to="/inquiry">Inquiry</Link>
       ),
     },
-    {
-      key: "/earnings",
-      icon: <RiMoneyDollarCircleLine size={25} />,
-      label: isCollapsed ? (
-        <Link to="/earnings">Earnings</Link>
-      ) : (
-        <Link to="/earnings">Earnings</Link>
-      ),
-    },
-    {
-      key: "/faq",
-      icon: <FaQuoteRight size={25} />,
-      label: isCollapsed ? (
-        <Link to="/faq">Faq</Link>
-      ) : (
-        <Link to="/faq">Faq</Link>
-      ),
-    },
+
     {
       key: "subMenuSetting1",
       icon: <RiSettings5Line size={25} />,
       label: isCollapsed ? null : "Settings",
       children: isCollapsed
         ? [
+            {
+              key: "/faq",
+              icon: <FaQuoteRight size={25} />,
+              label: isCollapsed ? (
+                <Link to="/faq">Faq</Link>
+              ) : (
+                <Link to="/faq">Faq</Link>
+              ),
+            },
             {
               key: "/return-policy",
               icon: <FaHandHoldingDollar size={24} />,
@@ -173,6 +171,15 @@ const Sidebar = ({ isCollapsed }) => {
           ]
         : [
             {
+              key: "/faq",
+              icon: <FaQuoteRight size={25} />,
+              label: isCollapsed ? (
+                <Link to="/faq">Faq</Link>
+              ) : (
+                <Link to="/faq">Faq</Link>
+              ),
+            },
+            {
               key: "/return-policy",
               icon: <FaHandHoldingDollar size={24} />,
               label: (
@@ -210,15 +217,15 @@ const Sidebar = ({ isCollapsed }) => {
             },
           ],
     },
-    {
-      key: "/logout",
-      icon: <FiLogOut size={24} />,
-      label: isCollapsed ? null : (
-        <p onClick={handleLogout} className="text-white hover:text-white">
-          Logout
-        </p>
-      ),
-    },
+    // {
+    //   key: "/logout",
+    //   icon: <FiLogOut size={24} />,
+    //   label: isCollapsed ? null : (
+    //     <p onClick={handleLogout} className="text-white hover:text-white">
+    //       Logout
+    //     </p>
+    //   ),
+    // },
   ];
 
   useEffect(() => {
@@ -227,9 +234,15 @@ const Sidebar = ({ isCollapsed }) => {
 
   return (
     <div
-      className={`bg-sambaSD h-[95%] shadow-md transition-all duration-300 mt-5 rounded-2xl overflow-x-hidden ${
-        isCollapsed ? "w-[80px]" : "w-[280px]"
-      }`}
+      className={`bg-sambaSD h-[95%] shadow-md transition-all duration-300 mt-5 rounded-2xl overflow-x-hidden verflow-y-scroll  flex flex-col items-center [&::-webkit-scrollbar]:w-0
+                    [&::-webkit-scrollbar-track]:rounded-full
+                    [&::-webkit-scrollbar-track]:bg-gray-100
+                    [&::-webkit-scrollbar-thumb]:rounded-full
+                    [&::-webkit-scrollbar-thumb]:bg-gray-300
+                    dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+                    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 ${
+                      isCollapsed ? "w-[80px]" : "w-[280px]"
+                    }`}
     >
       <Link
         to="/"
@@ -249,6 +262,12 @@ const Sidebar = ({ isCollapsed }) => {
         items={menuItems}
         className="text-white mt-10 bg-sambaSD"
       />
+      <Link
+        to="/auth/login"
+        className="text-sm text-red-600 flex items-center border border-transparent gap-2 mt-40 hover:border hover:border-red-600 rounded-lg px-3 py-1"
+      >
+        <FiLogOut size={25} /> Log Out
+      </Link>
     </div>
   );
 };

@@ -31,11 +31,13 @@ function Setting() {
         components: {
           Tabs: {
             itemColor: "white",
-            inkBarColor: "#a11d26",
+
+            inkBarColor: "#d99e1e",
             itemHoverColor: "white",
-            itemSelectedColor: "#a11d26",
-            titleFontSize: "18px",
+            itemSelectedColor: "#d99e1e",
+            titleFontSize: "20px",
             horizontalMargin: "0 0 30px 0",
+            itemActiveColor: "#d99e1e",
           },
         },
       }}

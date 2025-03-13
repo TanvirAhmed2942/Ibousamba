@@ -13,11 +13,11 @@ import AdminProfile from "../Pages/Dashboard/AdminProfile/AdminProfile";
 import Setting from "../Pages/Dashboard/Setting/Setting.jsx";
 
 // import OrderDetails from "../Pages/Dashboard/OrderDetails/OrderDetails.jsx";
-import Earnings from "../Pages/Dashboard/Earnings/Earnings.jsx";
+
 import ReturnPolicy from "../Pages/Dashboard/Policy/ReturnPolicy.jsx";
 import PrivacyPolicy from "../Pages/Dashboard/Policy/PrivacyPolicy.jsx";
 import ProductList from "../Pages/Dashboard/ProductList/ProductList.jsx";
-import OrderManagement from "../Pages/Dashboard/OrderManagement/OrderManagement.jsx";
+
 import Notifications from "../Pages/Dashboard/Notification/Notifications.jsx";
 import MainCategory from "../Pages/Dashboard/ManageCategory/MainCategory/MainCategory.jsx";
 import SubCategory from "../Pages/Dashboard/ManageCategory/SubCategory/SubCategory.jsx";
@@ -26,6 +26,7 @@ import TermsAndCondition from "../Pages/Dashboard/Policy/TermsAndCondition.jsx";
 import AboutUs from "../Pages/Dashboard/Policy/AboutUs.jsx";
 import Faq from "../Pages/Dashboard/Faq/Faq.jsx";
 import Brands from "../Pages/Dashboard/Brands/Brands.jsx";
+import Inquiry from "../Pages/Dashboard/Inquiry/Inquiry.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,13 +50,10 @@ const router = createBrowserRouter([
         path: "/products",
         element: <ProductList />,
       },
+
       {
-        path: "/order-management",
-        element: <OrderManagement />,
-      },
-      {
-        path: "/earnings",
-        element: <Earnings />,
+        path: "/inquiry",
+        element: <Inquiry />,
       },
       {
         path: "/return-policy",

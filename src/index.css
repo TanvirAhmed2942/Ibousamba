@@ -276,6 +276,17 @@ span.anticon.anticon-right.ant-collapse-arrow {
   border-radius: 5px;
 }
 
+/* tabs */
+.ant-tabs-top > .ant-tabs-nav .ant-tabs-ink-bar {
+  height: 4px;
+}
+
+/* checkbox */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: oklch(0.527 0.154 150.069);
+  /* border-color: #1677ff; */
+}
+
 /* .ant-pagination .ant-pagination-item a {
   color: white !important;
   border: none !important;

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { LuArrowLeftRight } from "react-icons/lu";
 import { Table, ConfigProvider } from "antd";
 import { IoEye } from "react-icons/io5";
-import TransactionDetailsModal from "./TransactionDetailsModal";
-function Earnings() {
+import InquiryDetailsModal from "./InquiryDetailsModal";
+function Inquiry() {
   return (
     <div className="px-3">
       <div className="w-[576px] h-14 flex justify-between my-4">
@@ -18,14 +18,14 @@ function Earnings() {
           <span>${3587}</span>
         </div>
       </div>
-      <EarningsTable />
+      <InquiryTable />
     </div>
   );
 }
 
-export default Earnings;
+export default Inquiry;
 
-const EarningsTable = () => {
+const InquiryTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = (record) => {
     setIsModalOpen(true); // Open modal
@@ -104,7 +104,7 @@ const EarningsTable = () => {
           <Table columns={columns} dataSource={rawData} pagination />
         </div>
       </ConfigProvider>
-      <TransactionDetailsModal
+      <InquiryDetailsModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       />

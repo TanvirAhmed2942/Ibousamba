@@ -14,7 +14,7 @@ function Profile() {
               defaultActiveColor: "#ffffff",
               defaultActiveBorderColor: "#a11d26 ",
               defaultActiveBg: "#a11d26 ",
-              defaultHoverBg: "#a11d26 ",
+              defaultHoverBg: "#d99e1e  ",
               defaultHoverColor: "#ffffff",
             },
           },
@@ -46,7 +46,7 @@ function Profile() {
                 <button>
                   <FaFeather
                     size={30}
-                    className="text-quilocoD absolute top-16 left-28 rounded-full bg-black p-1"
+                    className="text-samba absolute top-16 left-28 rounded-full bg-black p-1"
                   />
                 </button>
               </Upload>
@@ -62,7 +62,7 @@ function Profile() {
                   <HiMiniPencil size={20} className="text-white" />
                 )
               }
-              className="bg-quilocoD/80 border-none text-white min-w-20 min-h-8 text-xs rounded-lg"
+              className="bg-samba/80 border-none text-white min-w-20 min-h-8 text-xs rounded-lg"
             >
               {showButton ? "Cancel" : "Edit Profile"}
             </Button>
@@ -88,7 +88,7 @@ const ProfileDetails = ({ showButton, setShowButton }) => {
             defaultActiveColor: "#ffffff",
             defaultActiveBorderColor: "#a11d26 ",
             defaultActiveBg: "#a11d26 ",
-            defaultHoverBg: "#a11d26 ",
+            defaultHoverBg: "#d99e1e ",
             defaultHoverColor: "#ffffff",
           },
           Form: {
@@ -102,13 +102,19 @@ const ProfileDetails = ({ showButton, setShowButton }) => {
             activeBorderColor: "grey",
             hoverBorderColor: "grey",
           },
+          // Input: {
+          //   colorBgBase: "black",
+          //   colorBgContainer: "black",
+          //   colorBgBaseHover: "black",
+          //   activeBg: "black",
+          //   colorBorder: "transparent",
+          //   colorPrimaryBorder: "transparent",
+          //   boxShadow: "none",
+          // },
           Input: {
-            colorBgBase: "black",
-            colorBgContainer: "black",
-            colorBgBaseHover: "black",
-            activeBg: "black",
+            colorBgBase: "#1f1f1f",
+            colorBgContainer: "#1f1f1f",
             colorBorder: "transparent",
-            colorPrimaryBorder: "transparent",
             boxShadow: "none",
           },
         },
@@ -119,13 +125,13 @@ const ProfileDetails = ({ showButton, setShowButton }) => {
           <Form.Item label="Name" className="w-full">
             <Input
               placeholder="Enter your name"
-              className="bg-black border-none h-12 text-slate-300"
+              className="bg-[1f1f1f] border-none h-12 text-slate-300"
             />
           </Form.Item>
           <Form.Item label="Email" className="w-full">
             <Input
               placeholder="Enter your email"
-              className="bg-black border-none h-12 text-slate-300"
+              className="bg-[1f1f1f] border-none h-12 text-slate-300"
             />
           </Form.Item>
         </div>
@@ -133,13 +139,13 @@ const ProfileDetails = ({ showButton, setShowButton }) => {
           <Form.Item label="Phone" className="w-full">
             <Input
               placeholder="Enter your phone number"
-              className="bg-black border-none h-12 text-slate-300 "
+              className="bg-[1f1f1f] border-none h-12 text-slate-300"
             />
           </Form.Item>
           <Form.Item label="Password" className="w-full">
             <Input.Password
               placeholder="Enter Password"
-              className="bg-black border-none h-12 text-slate-300"
+              className="bg-[1f1f1f] border-none h-12 text-slate-300"
             />
           </Form.Item>
         </div>
@@ -149,7 +155,7 @@ const ProfileDetails = ({ showButton, setShowButton }) => {
             <Button
               block
               onClick={() => setShowButton(false)}
-              className="bg-quilocoD/80 border-none text-white min-w-20 min-h-10 text-xs rounded-lg"
+              className="bg-samba/80 border-none text-white min-w-20 min-h-10 text-xs rounded-lg"
             >
               Save Changes
             </Button>
