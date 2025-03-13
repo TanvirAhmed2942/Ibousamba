@@ -530,3 +530,30 @@ span.anticon.anticon-right.ant-collapse-arrow {
     0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   padding: 12px;
 }
+
+:where(.css-dev-only-do-not-override-ylm7ub).ant-select-outlined:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
+  border: none !important;
+  height: 40px;
+  background: transparent !important;
+}
+.ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  /* border-color: #a3a3a3; */
+  background-color: #a3a3a3;
+}
+.ant-pagination
+  .ant-pagination-jump-next
+  .ant-pagination-item-container
+  .ant-pagination-item-ellipsis {
+  color: #a3a3a3;
+}
+
+.ant-pagination
+  .ant-pagination-jump-prev
+  .ant-pagination-item-container
+  .ant-pagination-item-ellipsis {
+  color: #a3a3a3;
+}

@@ -1,34 +1,44 @@
 import React, { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal, Button, ConfigProvider } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
-function DeleteModal({ isOpen, onClose, onConfirm }) {
+function DeleteModal({ isOpen, onClose, onConfirm, handleOk, handleClose }) {
   return (
-    <Modal
-      title="Delete Confirmation"
-      visible={isOpen}
-      onCancel={onClose}
-      footer={[
-        <Button
-          key="cancel"
-          onClick={onClose}
-          className="bg-gray-500 text-white hover:bg-gray-600"
-        >
-          Cancel
-        </Button>,
-        <Button
-          key="confirm"
-          onClick={onConfirm}
-          className="bg-red-500 text-white hover:bg-red-600"
-        >
-          Delete
-        </Button>,
-      ]}
-      closable={false}
-      icon={<ExclamationCircleOutlined />}
+    <ConfigProvider
+      theme={{
+        components: {
+          Modal: {
+            contentBg: "#f4e1b9",
+            headerBg: "#f4e1b9",
+          },
+        },
+      }}
     >
-      <p className="text-lg">Are you sure you want to delete this item?</p>
-    </Modal>
+      <Modal
+        // title="Delete Confirmation"
+        visible={isOpen}
+        onCancel={onClose}
+        footer={[
+          <div className="w-full flex items-center justify-center gap-2">
+            <Button key="cancel" onClick={handleClose}>
+              Cancel
+            </Button>
+
+            <Button key="delete" type="primary" danger onClick={handleOk}>
+              Delete
+            </Button>
+          </div>,
+        ]}
+        closable={false}
+        icon={<ExclamationCircleOutlined />}
+      >
+        <div className="w-full flex items-center justify-center">
+          <p className="text-sm text-black my-2">
+            Are you sure you want to delete this item?
+          </p>
+        </div>
+      </Modal>
+    </ConfigProvider>
   );
 }
 

@@ -90,7 +90,17 @@ const SubCategoryTable = () => {
         }}
       >
         <div className="custom-table">
-          <Table columns={columns} dataSource={rawData} pagination />
+          <Table
+            columns={columns}
+            dataSource={rawData}
+            pagination={{
+              // onChange: cancel,
+              defaultPageSize: 5,
+              position: ["bottomRight"],
+              size: "default",
+              total: 50,
+            }}
+          />
         </div>
       </ConfigProvider>
 

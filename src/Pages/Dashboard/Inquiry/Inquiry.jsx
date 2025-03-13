@@ -70,7 +70,17 @@ const InquiryTable = () => {
         }}
       >
         <div className="custom-table">
-          <Table columns={columns} dataSource={rawData} pagination />
+          <Table
+            columns={columns}
+            dataSource={rawData}
+            pagination={{
+              // onChange: cancel,
+              defaultPageSize: 5,
+              position: ["bottomRight"],
+              size: "default",
+              total: 50,
+            }}
+          />
         </div>
       </ConfigProvider>
       <InquiryDetailsModal
@@ -121,6 +131,60 @@ const rawData = [
   },
   {
     key: "5",
+    serial: "005",
+    fullName: "Charlie White",
+    userEmail: "charlie.white@example.com",
+    inquiryTopics: "Product Availability",
+    phoneNumber: "159-753-4862",
+    yourInquiry: "Is this product in stock?",
+  },
+  {
+    key: "6",
+    serial: "003",
+    fullName: "Alice Johnson",
+    userEmail: "alice.johnson@example.com",
+    inquiryTopics: "Shipping",
+    phoneNumber: "456-789-1234",
+    yourInquiry: "How long does shipping take?",
+  },
+  {
+    key: "7",
+    serial: "004",
+    fullName: "Bob Brown",
+    userEmail: "bob.brown@example.com",
+    inquiryTopics: "Returns",
+    phoneNumber: "321-654-9870",
+    yourInquiry: "What is your return policy?",
+  },
+  {
+    key: "8",
+    serial: "005",
+    fullName: "Charlie White",
+    userEmail: "charlie.white@example.com",
+    inquiryTopics: "Product Availability",
+    phoneNumber: "159-753-4862",
+    yourInquiry: "Is this product in stock?",
+  },
+  {
+    key: "9",
+    serial: "003",
+    fullName: "Alice Johnson",
+    userEmail: "alice.johnson@example.com",
+    inquiryTopics: "Shipping",
+    phoneNumber: "456-789-1234",
+    yourInquiry: "How long does shipping take?",
+  },
+  {
+    key: "10",
+    serial: "004",
+    fullName: "Bob Brown",
+    userEmail: "bob.brown@example.com",
+    inquiryTopics: "Returns",
+    phoneNumber: "321-654-9870",
+    yourInquiry: "What is your return policy?",
+  },
+  {
+    key: "11",
     serial: "005",
     fullName: "Charlie White",
     userEmail: "charlie.white@example.com",
