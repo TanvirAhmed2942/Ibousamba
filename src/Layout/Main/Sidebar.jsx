@@ -260,11 +260,12 @@ const Sidebar = ({ isCollapsed }) => {
         selectedKeys={[selectedKey]}
         // style={{ background: "#232323" }}
         items={menuItems}
-        className="text-white mt-10 bg-sambaSD"
+        inlineCollapsed={isCollapsed}
+        className="text-white  bg-sambaSD my-auto"
       />
       <Link
         to="/auth/login"
-        className="text-sm text-red-600 flex items-center border border-transparent gap-2 mt-40 hover:border hover:border-red-600 rounded-lg px-3 py-1"
+        className="text-sm text-red-600 flex items-center border border-transparent gap-2 mt-40 mb-8 hover:border hover:border-red-600 rounded-lg px-3 py-1"
       >
         {isCollapsed ? (
           <FiLogOut size={25} />

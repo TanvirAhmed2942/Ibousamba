@@ -98,7 +98,7 @@ const SubCategory = () => {
               suffixIcon={
                 <MdOutlineArrowDropDown size={25} className="text-white" />
               }
-              placeholder="Select a person"
+              placeholder="Category"
               options={[
                 {
                   value: "1",

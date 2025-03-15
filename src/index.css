@@ -193,6 +193,34 @@ span.anticon.anticon-right.ant-collapse-arrow {
 .ant-input-outlined {
   outline: none;
 }
+.ant-menu-light.ant-menu-submenu-popup > .ant-menu {
+  background-color: #d99e1e !important;
+}
+.ant-menu-submenu-popup .ant-menu-vertical .ant-menu-item,
+:where(.css-dev-only-do-not-override-11lehqq).ant-menu-submenu-popup
+  .ant-menu-vertical
+  .ant-menu-submenu-title {
+  height: 40px;
+  line-height: 40px;
+  padding-inline: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-inline: 4px;
+  margin-block: 4px;
+  width: calc(100% - 8px);
+  padding-top: 5px;
+}
+.ant-menu-inline-collapsed > .ant-menu-item {
+  padding-inline: calc(50% - 5px - 15px);
+  padding-top: 10px !important;
+}
+.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title {
+  padding-inline: calc(50% - 8px - 14px);
+  padding-top: 10px;
+}
+.ant-menu-submenu-popup > .ant-menu .ant-menu-item {
+  border-radius: 8px !important;
+}
 
 /* Badge */
 :where(.css-dev-only-do-not-override-11lehqq).ant-badge.ant-badge
@@ -301,25 +329,6 @@ span.anticon.anticon-right.ant-collapse-arrow {
 
   border-radius: 5px !important;
   /* transform: scale(1); */
-}
-
-.ant-steps
-  .ant-steps-item-finish
-  > .ant-steps-item-container
-  > .ant-steps-item-tail::after {
-  background-color: #975cdb;
-}
-
-.ant-steps
-  .ant-steps-item-finish
-  .ant-steps-item-icon
-  > .ant-steps-icon
-  .ant-steps-icon-dot {
-  background: #975cdb;
-}
-
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-  color: #975cdb;
 }
 
 :where(.css-dev-only-do-not-override-15svtq1).ant-select-outlined:not(
@@ -449,24 +458,6 @@ span.anticon.anticon-right.ant-collapse-arrow {
   background-color: #808080 !important;
   user-select: none;
 }
-/* :where(.css-dev-only-do-not-override-4ovdcp).ant-pagination
-  .ant-pagination-prev
-  .ant-pagination-item-link,
-:where(.css-dev-only-do-not-override-4ovdcp).ant-pagination
-  .ant-pagination-next
-  .ant-pagination-item-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  font-size: 12px;
-  text-align: center;
-  background-color: #e2e2e2;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  outline: none;
-  transition: all 0.2s;
-} */
 
 .ant-table-filter-dropdown {
   background-color: #1e1e1e !important; /* Dark background */

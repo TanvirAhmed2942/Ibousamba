@@ -124,7 +124,7 @@ function Brands() {
   };
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex items-center justify-start gap-2 flex-wrap px-3 py-4">
       {/* Add New Brand Button */}
       <div
         onClick={handleAddBrand}
