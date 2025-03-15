@@ -27,12 +27,17 @@ import AboutUs from "../Pages/Dashboard/Policy/AboutUs.jsx";
 import Faq from "../Pages/Dashboard/Faq/Faq.jsx";
 import Brands from "../Pages/Dashboard/Brands/Brands.jsx";
 import Inquiry from "../Pages/Dashboard/Inquiry/Inquiry.jsx";
+import ProtectedRoute from "../components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
 
-    element: <Main />,
+    element: (
+      <ProtectedRoute>
+        <Main />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",

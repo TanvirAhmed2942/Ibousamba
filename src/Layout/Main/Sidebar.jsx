@@ -28,6 +28,7 @@ const Sidebar = ({ isCollapsed }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    console.log("logout");
     localStorage.removeItem("token");
     navigate("/auth/login");
   };
@@ -266,6 +267,7 @@ const Sidebar = ({ isCollapsed }) => {
       <Link
         to="/auth/login"
         className="text-sm text-red-600 flex items-center border border-transparent gap-2 mt-40 mb-8 hover:border hover:border-red-600 rounded-lg px-3 py-1"
+        onClick={handleLogout}
       >
         {isCollapsed ? (
           <FiLogOut size={25} />
