@@ -1,143 +1,3 @@
-// import React, { useState } from "react";
-// import {
-//   Modal,
-//   ConfigProvider,
-//   Form,
-//   Input,
-//   Button,
-//   Image,
-//   Upload,
-// } from "antd";
-// import { LiaCloudUploadAltSolid } from "react-icons/lia";
-// const AddBrandModal = ({ isModalOpen, handleClose }) => {
-//   const [fileList, setFileList] = useState([]);
-//   const [previewImage, setPreviewImage] = useState("");
-//   const [previewOpen, setPreviewOpen] = useState(false);
-
-//   // Preview Image Handler
-//   const handlePreview = async (file) => {
-//     if (!file.url && !file.preview) {
-//       file.preview = await getBase64(file.originFileObj);
-//     }
-//     setPreviewImage(file.url || file.preview);
-//     setPreviewOpen(true);
-//   };
-
-//   // Handle Image Upload Change
-//   const handleChange = ({ fileList: newFileList }) => {
-//     setFileList(newFileList);
-//   };
-
-//   // Convert File to Base64
-//   const getBase64 = (file) => {
-//     return new Promise((resolve, reject) => {
-//       const reader = new FileReader();
-//       reader.readAsDataURL(file);
-//       reader.onload = () => resolve(reader.result);
-//       reader.onerror = (error) => reject(error);
-//     });
-//   };
-
-//   return (
-//     <ConfigProvider
-//       theme={{
-//         components: {
-//           Modal: {
-//             contentBg: "#f4e1b9",
-//             headerBg: "#f4e1b9",
-//           },
-//           Input: {
-//             hoverBorderColor: "none",
-//             activeBorderColor: "none",
-//           },
-//           Button: {
-//             defaultBg: "#d99e1e",
-//             defaultColor: "black",
-//             defaultBorderColor: "#d99e1e",
-//             defaultHoverBg: "#d99e1e",
-//             defaultHoverColor: "black",
-//             defaultHoverBorderColor: "#d99e1e",
-//             defaultActiveBg: "#d99e1e",
-//             defaultActiveColor: "black",
-//             defaultActiveBorderColor: "#d99e1e",
-//           },
-//         },
-//       }}
-//     >
-//       <Modal
-//         title="Add New Brand"
-//         open={isModalOpen}
-//         onCancel={handleClose}
-//         footer={null}
-//         closable
-//       >
-//         <Form layout="vertical" className="flex flex-col gap-1">
-//           {/* Upload Component with white background */}
-//           <Form.Item label="Brand Image" required>
-//             <Upload
-//               action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-//               listType="picture-card"
-//               fileList={fileList}
-//               onPreview={handlePreview}
-//               onChange={handleChange}
-//             >
-//               {fileList.length >= 1 ? null : (
-//                 <div className="w-full flex items-center justify-center">
-//                   <div className="mt-2 text-black flex flex-col items-center">
-//                     <LiaCloudUploadAltSolid size={25} />
-//                     Upload
-//                   </div>
-//                 </div>
-//               )}
-//             </Upload>
-//           </Form.Item>
-
-//           {/* Single Image Preview */}
-//           {previewImage && (
-//             <Form.Item>
-//               <div className="flex justify-center">
-//                 <Image
-//                   preview={{
-//                     visible: previewOpen,
-//                     onVisibleChange: (visible) => setPreviewOpen(visible),
-//                     afterOpenChange: (visible) =>
-//                       !visible && setPreviewImage(""),
-//                   }}
-//                   src={previewImage}
-//                   style={{ width: "100%", maxWidth: 300 }}
-//                 />
-//               </div>
-//             </Form.Item>
-//           )}
-
-//           {/* Category Name Form */}
-//           <Form.Item
-//             label="Brand Url Link"
-//             name="brandUrl"
-//             rules={[
-//               {
-//                 required: true,
-//                 message: "Enter your Brand Link",
-//               },
-//             ]}
-//           >
-//             <Input className="h-9" />
-//           </Form.Item>
-
-//           {/* Save Button */}
-//           <Form.Item>
-//             <Button block className="h-9">
-//               Save
-//             </Button>
-//           </Form.Item>
-//         </Form>
-//       </Modal>
-//     </ConfigProvider>
-//   );
-// };
-
-// export default AddBrandModal;
-
 import React, { useEffect, useState } from "react";
 import {
   Modal,
@@ -147,6 +7,7 @@ import {
   Button,
   Upload,
   Image,
+  message,
 } from "antd";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
 
@@ -158,43 +19,79 @@ const AddBrandModal = ({
 }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [imageData, setImageData] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
+
+  // Convert File to Base64 for both preview and storage
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   // Populate form when editing
   useEffect(() => {
     if (initialBrand) {
       form.setFieldsValue({ name: initialBrand.name });
-      setPreviewImage(initialBrand.Img);
+      if (initialBrand.Img) {
+        setPreviewImage(initialBrand.Img);
+      }
     } else {
       form.resetFields();
       setPreviewImage("");
       setFileList([]);
+      setImageData(null);
     }
   }, [initialBrand, form]);
 
-  // Handle Save
-  const onFinish = (values) => {
-    handleSave({
-      name: values.name,
-      Img: previewImage || initialBrand?.Img,
-    });
-  };
-
-  // Handle Image Upload
-  const handleChange = ({ fileList: newFileList }) => {
+  // Handle Image Upload Change
+  const handleChange = async ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    if (newFileList.length > 0) {
-      getBase64(newFileList[0].originFileObj, (imageUrl) => {
-        setPreviewImage(imageUrl);
-      });
+
+    // If there's a file, convert it to base64
+    if (newFileList.length > 0 && newFileList[0].originFileObj) {
+      try {
+        const base64Data = await getBase64(newFileList[0].originFileObj);
+        setImageData(base64Data);
+        setPreviewImage(base64Data);
+        console.log("Image converted to base64");
+      } catch (error) {
+        console.error("Error converting image to base64:", error);
+        message.error("Failed to process the image");
+      }
+    } else {
+      setImageData(null);
+      setPreviewImage("");
     }
   };
 
-  // Convert File to Base64
-  const getBase64 = (file, callback) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => callback(reader.result);
+  // Handle Form Submit
+  const onFinish = (values) => {
+    try {
+      // Determine which image to use
+      const imageToSend = imageData || initialBrand?.Img || null;
+
+      // If no image is selected, show an error
+      if (!imageToSend) {
+        message.error("Please upload an image");
+        return;
+      }
+
+      // Create the object to save
+      const brandData = {
+        name: values.name,
+        Img: imageToSend,
+      };
+
+      console.log("Form data on save:", brandData);
+      handleSave(brandData);
+    } catch (error) {
+      console.error("Form submission error:", error);
+      message.error("Failed to save brand information");
+    }
   };
 
   return (
@@ -205,12 +102,12 @@ const AddBrandModal = ({
           Button: {
             defaultBg: "#d99e1e",
             defaultColor: "white",
-            defaultHoverBg: "d99e1e",
+            defaultHoverBg: "#d99e1e", // Fixed missing # symbol
             defaultHoverColor: "white",
             defaultHoverBorderColor: "none",
             defaultActiveBg: "#d99e1e",
             defaultActiveColor: "white",
-            defaultActiveBorderColor: "d99e1e",
+            defaultActiveBorderColor: "#d99e1e", // Fixed missing # symbol
           },
         },
       }}
@@ -227,24 +124,49 @@ const AddBrandModal = ({
           onFinish={onFinish}
           className="flex flex-col gap-2"
         >
+          {/* Upload Component */}
           <Form.Item label="Brand Image">
-            {previewImage ? <Image src={previewImage} width={100} /> : null}
             <Upload
               listType="picture-card"
               fileList={fileList}
               onChange={handleChange}
+              beforeUpload={() => false} // Prevent automatic upload
               showUploadList={false}
             >
-              <div className="flex flex-col items-center ">
-                <LiaCloudUploadAltSolid size={25} className="text-black" />
-                <p className="text-black">Click or drag file to upload</p>
-              </div>
+              {fileList.length >= 1 ? null : (
+                <div className="flex flex-col items-center">
+                  <LiaCloudUploadAltSolid size={25} className="text-black" />
+                  <p className="text-black">Click or drag file to upload</p>
+                </div>
+              )}
             </Upload>
           </Form.Item>
+
+          {/* Image Preview */}
+          {previewImage && (
+            <Form.Item label="Preview">
+              <div className="flex justify-center">
+                <Image src={previewImage} width={100} />
+                <Button
+                  size="small"
+                  danger
+                  onClick={() => {
+                    setFileList([]);
+                    setPreviewImage("");
+                    setImageData(null);
+                  }}
+                  className="ml-2"
+                >
+                  Remove
+                </Button>
+              </div>
+            </Form.Item>
+          )}
+
           <Form.Item
-            label="Brand Url Link"
-            name="brandUrl"
-            rules={[{ required: true, message: "Enter Brand Url Link" }]}
+            label="Brand Name"
+            name="name"
+            rules={[{ required: true, message: "Please enter a brand name" }]}
           >
             <Input className="h-10" />
           </Form.Item>

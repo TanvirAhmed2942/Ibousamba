@@ -36,8 +36,14 @@ const MainCategoryTable = () => {
     }
   };
 
-  const handleEditCategory = async (updatedName, imageBase64) => {
-    console.log(updatedName, imageBase64);
+  const handleEditCategory = async (
+    data,
+    imageBase64,
+    updatedName,
+    currentRecord
+  ) => {
+    console.log(data);
+
     try {
       // Create a new FormData object to send the data
       const formData = new FormData();
@@ -45,9 +51,19 @@ const MainCategoryTable = () => {
       // Append the category name to the FormData object
       formData.append("name", updatedName);
 
-      // If there's a new image (base64), append it to the FormData object
+      // If there's a new image (base64), convert it to a file and append it to the FormData object
       if (imageBase64) {
-        formData.append("image", imageBase64); // You can use the base64 directly or convert it to a file if needed
+        // Convert base64 to a file (assuming the image is in PNG format)
+        const byteCharacters = atob(imageBase64.split(",")[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "image/png" });
+        const file = new File([blob], "image.png", { type: "image/png" });
+
+        formData.append("image", file);
       }
 
       // Log the FormData object content
@@ -61,12 +77,13 @@ const MainCategoryTable = () => {
         hasImage: !!imageBase64,
       });
 
+      // Send the FormData to the backend
       const response = await updateCategory({
         id: currentRecord._id,
         data: formData, // Send FormData as the payload
       }).unwrap();
 
-      message.success(`Successfully updated category`);
+      message.success("Successfully updated category");
       console.log("Category Update Response:", response);
       setIsModalVisible(false);
     } catch (err) {
@@ -74,7 +91,6 @@ const MainCategoryTable = () => {
       message.error("Failed to update category");
     }
   };
-
   const columns = [
     {
       title: "#Sl",

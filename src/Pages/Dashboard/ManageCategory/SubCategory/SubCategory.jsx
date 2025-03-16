@@ -31,7 +31,7 @@ const SubCategory = () => {
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
     setCategoryID(value);
-    // console.log("Selected Category ID:", value);
+    console.log("Selected Category ID:", value);
   };
 
   const columns = [

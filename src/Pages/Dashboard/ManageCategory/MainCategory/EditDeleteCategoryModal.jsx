@@ -55,7 +55,7 @@ const EditDeleteCategoryModal = ({
       const updatedName = values.categoryName;
 
       // Submit both the name and image (if changed)
-      onCategoryChange(updatedName, imageBase64);
+      onCategoryChange(record, imageBase64, updatedName);
     } catch (errorInfo) {
       console.log("Validation failed:", errorInfo);
     }

@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { Table, ConfigProvider, Alert } from "antd";
+import { Table, ConfigProvider, Alert, message, Modal } from "antd";
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 
 import EditDeleteSubCategoryModal from "./EditDeleteSubCategoryModal";
-import { useGetSubCategoriesQuery } from "../../../../redux/apiSlices/subCategorySlice";
+import {
+  useDeleteSubCategoryMutation,
+  useGetSubCategoriesQuery,
+  useUpdateSubCategoryMutation,
+} from "../../../../redux/apiSlices/subCategorySlice";
 import { imageUrl } from "../../../../redux/api/baseApi";
 
 const SubCategoryTable = ({ categoryID }) => {
@@ -13,13 +17,15 @@ const SubCategoryTable = ({ categoryID }) => {
   const [currentRecord, setCurrentRecord] = useState(null);
   const [categoryName, setCategoryName] = useState("");
 
+  const [deleteSubCategory, { isLoading: isDeleting }] =
+    useDeleteSubCategoryMutation();
+  const [updateSubCategory, { isLoading: isUpdating }] =
+    useUpdateSubCategoryMutation();
+
   // Fetch subcategories from API only if categoryID is valid
   const { data, isLoading, error } = useGetSubCategoriesQuery(categoryID, {
     skip: !categoryID, // Skip the query if categoryID is undefined
   });
-
-  // console.log("Category ID Sent in URL:", categoryID);
-  console.log("Subcategories Response:", data);
 
   // Transform API data for table
   const subCategoryData =
@@ -29,6 +35,43 @@ const SubCategoryTable = ({ categoryID }) => {
       categoryImg: item.image || "https://via.placeholder.com/50", // Fallback Image
       category: item.name,
     })) || [];
+
+  // Delete subcategory
+  const handleDeleteSubCategory = async () => {
+    if (!currentRecord) return;
+
+    try {
+      await deleteSubCategory(currentRecord.key).unwrap();
+      message.success(`Successfully deleted`);
+      setIsModalVisible(false);
+    } catch (err) {
+      console.error("Category Deletion Error:", err);
+      message.error("Failed to delete category");
+    }
+  };
+
+  // Edit Sub Category
+  const handleEditSubCategory = async (formData) => {
+    if (!currentRecord) return;
+
+    // Log FormData contents
+    for (let pair of formData.entries()) {
+      console.log("sss", pair[0], pair[1]);
+    }
+
+    try {
+      const response = await updateSubCategory({
+        id: currentRecord.key,
+        updatedData: formData, // Send formData
+      }).unwrap();
+
+      console.log("Sub-Category Updated Response:", response);
+      setIsModalVisible(false);
+    } catch (err) {
+      console.error("Error updating subcategory:", err);
+      message.error("Failed to update sub-category");
+    }
+  };
 
   const columns = [
     {
@@ -49,7 +92,7 @@ const SubCategoryTable = ({ categoryID }) => {
         />
       ),
     },
-    { title: "Sub-CAtegory", dataIndex: "category", key: "category" },
+    { title: "Sub-Category", dataIndex: "category", key: "category" },
     {
       title: "Action",
       key: "action",
@@ -85,19 +128,6 @@ const SubCategoryTable = ({ categoryID }) => {
     setIsModalVisible(true);
   };
 
-  const handleModalOk = () => {
-    if (modalMode === "edit") {
-      console.log("Updated category:", categoryName);
-    } else {
-      console.log("Deleted category:", currentRecord.category);
-    }
-    setIsModalVisible(false);
-  };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <div>
       {error && (
@@ -113,6 +143,10 @@ const SubCategoryTable = ({ categoryID }) => {
       <ConfigProvider
         theme={{
           components: {
+            Modal: {
+              contentBg: "#f4e1b9",
+              headerBg: "#f4e1b9",
+            },
             Table: {
               headerBg: "#575858",
               headerSplitColor: "none",
@@ -138,18 +172,36 @@ const SubCategoryTable = ({ categoryID }) => {
             }}
           />
         </div>
-      </ConfigProvider>
 
-      {/* Modal for Edit and Delete */}
-      <EditDeleteSubCategoryModal
-        visible={isModalVisible}
-        onCancel={handleModalCancel}
-        onOk={handleModalOk}
-        mode={modalMode}
-        record={currentRecord}
-        categoryName={categoryName}
-        onCategoryChange={(name) => setCategoryName(name)}
-      />
+        {/* Confirm Delete Modal */}
+        <Modal
+          title="Delete Sub-Category"
+          open={modalMode === "delete" && isModalVisible}
+          onOk={handleDeleteSubCategory}
+          onCancel={() => setIsModalVisible(false)}
+          confirmLoading={isDeleting}
+          okText="Delete"
+          okButtonProps={{ danger: true }}
+        >
+          <p className="text-black">
+            Are you sure you want to delete <b>{currentRecord?.category}</b>?
+          </p>
+        </Modal>
+
+        {/* Edit Modal */}
+        {modalMode === "edit" && (
+          <EditDeleteSubCategoryModal
+            visible={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            onOk={handleEditSubCategory} // Pass the edit function
+            mode="edit"
+            record={currentRecord}
+            categoryName={categoryName}
+            onCategoryChange={(name) => setCategoryName(name)}
+            confirmLoading={isUpdating}
+          />
+        )}
+      </ConfigProvider>
     </div>
   );
 };

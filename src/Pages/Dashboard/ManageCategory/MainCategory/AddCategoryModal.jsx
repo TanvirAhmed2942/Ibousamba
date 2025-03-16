@@ -56,7 +56,7 @@ const AddCategoryModal = ({ isModalOpen, handleClose, record }) => {
       console.log("Response:", response);
       form.resetFields();
       setFileList([]);
-      handleClose();
+      handleClose(); // Close the modal after saving, but no need to update any list
     } catch (error) {
       console.error("Category Creation Failed:", error);
       message.error("Failed to create category.");
