@@ -14,8 +14,8 @@ const ForgotPassword = () => {
       const response = await forgotPassword({ email: values.email }).unwrap();
       console.log("Forgot Password Success:", response);
       localStorage.setItem("forgetToken", response.data.forgetToken);
-      // navigate(`/auth/verify-otp?email=${values.email}`);
-      navigate(`/auth/verify-otp`);
+      navigate(`/auth/verify-otp?email=${values.email}`);
+      // navigate(`/auth/verify-otp`);
     } catch (err) {
       console.error("Forgot Password Error:", err);
     }

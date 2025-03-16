@@ -1,27 +1,55 @@
-// import React, { useState } from "react";
-import { Table, ConfigProvider, Modal, Input, Button } from "antd";
-import { FiEdit } from "react-icons/fi";
-import { MdDeleteOutline, MdOutlineDeleteForever } from "react-icons/md";
-
-import EditDeleteCategoryModal from "./EditDeleteSubCategoryModal";
 import { useState } from "react";
-import EditDeleteSubCategoryModal from "./EditDeleteSubCategoryModal";
+import { Table, ConfigProvider, Alert } from "antd";
+import { FiEdit } from "react-icons/fi";
+import { MdDeleteOutline } from "react-icons/md";
 
-const SubCategoryTable = () => {
+import EditDeleteSubCategoryModal from "./EditDeleteSubCategoryModal";
+import { useGetSubCategoriesQuery } from "../../../../redux/apiSlices/subCategorySlice";
+import { imageUrl } from "../../../../redux/api/baseApi";
+
+const SubCategoryTable = ({ categoryID }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMode, setModalMode] = useState("edit"); // "edit" or "delete"
   const [currentRecord, setCurrentRecord] = useState(null);
   const [categoryName, setCategoryName] = useState("");
 
+  // Fetch subcategories from API only if categoryID is valid
+  const { data, isLoading, error } = useGetSubCategoriesQuery(categoryID, {
+    skip: !categoryID, // Skip the query if categoryID is undefined
+  });
+
+  // console.log("Category ID Sent in URL:", categoryID);
+  console.log("Subcategories Response:", data);
+
+  // Transform API data for table
+  const subCategoryData =
+    data?.data?.map((item, index) => ({
+      key: item._id,
+      serial: String(index + 1).padStart(3, "0"),
+      categoryImg: item.image || "https://via.placeholder.com/50", // Fallback Image
+      category: item.name,
+    })) || [];
+
   const columns = [
-    { title: "Serial", dataIndex: "serial", key: "serial" },
+    {
+      title: "#Sl",
+      key: "serial",
+      dataIndex: "serial",
+      render: (item, record, index) => <>{`#${index + 1}`}</>,
+    },
     {
       title: "Image",
       dataIndex: "categoryImg",
       key: "categoryImg",
-      render: (img) => <img src={img} alt="Category" style={{ width: 50 }} />,
+      render: (_, record) => (
+        <img
+          src={`${imageUrl}${record?.categoryImg}`}
+          alt="Category"
+          style={{ width: 50 }}
+        />
+      ),
     },
-    { title: "Category", dataIndex: "category", key: "category" },
+    { title: "Sub-CAtegory", dataIndex: "category", key: "category" },
     {
       title: "Action",
       key: "action",
@@ -59,10 +87,8 @@ const SubCategoryTable = () => {
 
   const handleModalOk = () => {
     if (modalMode === "edit") {
-      // Handle the category name update here
       console.log("Updated category:", categoryName);
     } else {
-      // Handle the category deletion here
       console.log("Deleted category:", currentRecord.category);
     }
     setIsModalVisible(false);
@@ -74,6 +100,16 @@ const SubCategoryTable = () => {
 
   return (
     <div>
+      {error && (
+        <Alert
+          message="Error fetching subcategories"
+          description={error.message}
+          type="error"
+          showIcon
+          className="mb-4"
+        />
+      )}
+
       <ConfigProvider
         theme={{
           components: {
@@ -92,13 +128,13 @@ const SubCategoryTable = () => {
         <div className="custom-table">
           <Table
             columns={columns}
-            dataSource={rawData}
+            dataSource={subCategoryData}
+            loading={isLoading}
             pagination={{
-              // onChange: cancel,
               defaultPageSize: 5,
               position: ["bottomRight"],
               size: "default",
-              total: 50,
+              total: subCategoryData.length,
             }}
           />
         </div>
@@ -119,18 +155,3 @@ const SubCategoryTable = () => {
 };
 
 export default SubCategoryTable;
-
-const rawData = [
-  {
-    key: "1",
-    serial: "001",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Heavy Machineries",
-  },
-  {
-    key: "2",
-    serial: "002",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Light Accessories",
-  },
-];

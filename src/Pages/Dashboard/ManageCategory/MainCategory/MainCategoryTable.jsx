@@ -1,26 +1,100 @@
-// import React, { useState } from "react";
-import { Table, ConfigProvider, Modal, Input, Button } from "antd";
+import { useState } from "react";
+import { Table, ConfigProvider, message } from "antd";
 import { FiEdit } from "react-icons/fi";
-import { MdDeleteOutline, MdOutlineDeleteForever } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 
 import EditDeleteCategoryModal from "./EditDeleteCategoryModal";
-import { useState } from "react";
+import {
+  useCategoryQuery,
+  useDeleteCategoryMutation,
+  useUpdateCategoryMutation,
+} from "../../../../redux/apiSlices/categorySlice";
+import { imageUrl } from "../../../../redux/api/baseApi";
 
 const MainCategoryTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMode, setModalMode] = useState("edit"); // "edit" or "delete"
   const [currentRecord, setCurrentRecord] = useState(null);
-  const [categoryName, setCategoryName] = useState("");
+
+  const { data } = useCategoryQuery();
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
+
+  const handleClose = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDeleteCategory = async () => {
+    try {
+      const response = await deleteCategory(currentRecord._id);
+      message.success(`Successfully deleted`);
+      console.log("Category Deletion Response:", response);
+      setIsModalVisible(false);
+    } catch (err) {
+      console.log("Category Deletion Error:", err);
+      message.error("Failed to delete category");
+    }
+  };
+
+  const handleEditCategory = async (updatedName, imageBase64) => {
+    console.log(updatedName, imageBase64);
+    try {
+      // Create a new FormData object to send the data
+      const formData = new FormData();
+
+      // Append the category name to the FormData object
+      formData.append("name", updatedName);
+
+      // If there's a new image (base64), append it to the FormData object
+      if (imageBase64) {
+        formData.append("image", imageBase64); // You can use the base64 directly or convert it to a file if needed
+      }
+
+      // Log the FormData object content
+      formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+
+      console.log("Updating category with FormData:", {
+        id: currentRecord._id,
+        updatedName: updatedName,
+        hasImage: !!imageBase64,
+      });
+
+      const response = await updateCategory({
+        id: currentRecord._id,
+        data: formData, // Send FormData as the payload
+      }).unwrap();
+
+      message.success(`Successfully updated category`);
+      console.log("Category Update Response:", response);
+      setIsModalVisible(false);
+    } catch (err) {
+      console.log("Category Update Error:", err);
+      message.error("Failed to update category");
+    }
+  };
 
   const columns = [
-    { title: "Serial", dataIndex: "serial", key: "serial" },
+    {
+      title: "#Sl",
+      key: "serial",
+      dataIndex: "serial",
+      render: (item, record, index) => <>{`#${index + 1}`}</>,
+    },
     {
       title: "Image",
-      dataIndex: "categoryImg",
-      key: "categoryImg",
-      render: (img) => <img src={img} alt="Category" style={{ width: 50 }} />,
+      dataIndex: "image",
+      key: "image",
+      render: (_, record) => (
+        <img
+          src={`${imageUrl}${record?.image}`}
+          alt="Category"
+          style={{ width: 50 }}
+        />
+      ),
     },
-    { title: "Category", dataIndex: "category", key: "category" },
+    { title: "Category", dataIndex: "name", key: "name" },
     {
       title: "Action",
       key: "action",
@@ -46,7 +120,6 @@ const MainCategoryTable = () => {
   const openEditModal = (record) => {
     setModalMode("edit");
     setCurrentRecord(record);
-    setCategoryName(record.category);
     setIsModalVisible(true);
   };
 
@@ -54,21 +127,6 @@ const MainCategoryTable = () => {
     setModalMode("delete");
     setCurrentRecord(record);
     setIsModalVisible(true);
-  };
-
-  const handleModalOk = () => {
-    if (modalMode === "edit") {
-      // Handle the category name update here
-      console.log("Updated category:", categoryName);
-    } else {
-      // Handle the category deletion here
-      console.log("Deleted category:", currentRecord.category);
-    }
-    setIsModalVisible(false);
-  };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
   };
 
   return (
@@ -91,13 +149,12 @@ const MainCategoryTable = () => {
         <div className="custom-table">
           <Table
             columns={columns}
-            dataSource={rawData}
+            dataSource={data?.data}
             pagination={{
-              // onChange: cancel,
               defaultPageSize: 5,
               position: ["bottomRight"],
               size: "default",
-              total: 50,
+              total: data?.data?.length || 0,
             }}
           />
         </div>
@@ -106,54 +163,14 @@ const MainCategoryTable = () => {
       {/* Modal for Edit and Delete */}
       <EditDeleteCategoryModal
         visible={isModalVisible}
-        onCancel={handleModalCancel}
-        onOk={handleModalOk}
+        onCancel={handleClose}
+        onDelete={handleDeleteCategory}
         mode={modalMode}
         record={currentRecord}
-        categoryName={categoryName}
-        onCategoryChange={(name) => setCategoryName(name)}
+        onCategoryChange={handleEditCategory}
       />
     </div>
   );
 };
 
 export default MainCategoryTable;
-
-const rawData = [
-  {
-    key: "1",
-    serial: "001",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Heavy Machineries",
-  },
-  {
-    key: "2",
-    serial: "002",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Light Accessories",
-  },
-  {
-    key: "3",
-    serial: "001",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Heavy Machineries",
-  },
-  {
-    key: "4",
-    serial: "002",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Light Accessories",
-  },
-  {
-    key: "5",
-    serial: "001",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Heavy Machineries",
-  },
-  {
-    key: "6",
-    serial: "002",
-    categoryImg: "https://via.placeholder.com/50",
-    category: "Light Accessories",
-  },
-];

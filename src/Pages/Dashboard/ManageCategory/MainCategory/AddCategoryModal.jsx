@@ -7,12 +7,26 @@ import {
   Button,
   Image,
   Upload,
+  message,
 } from "antd";
 import { BiCloudUpload } from "react-icons/bi";
+import { useCreateCategoryMutation } from "../../../../redux/apiSlices/categorySlice";
+
 const AddCategoryModal = ({ isModalOpen, handleClose, record }) => {
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [form] = Form.useForm(); // Get form instance
+  const [createCategory, { isLoading }] = useCreateCategoryMutation();
+  // Convert File to Base64
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   // Preview Image Handler
   const handlePreview = async (file) => {
@@ -28,14 +42,25 @@ const AddCategoryModal = ({ isModalOpen, handleClose, record }) => {
     setFileList(newFileList);
   };
 
-  // Convert File to Base64
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  // Handle Form Submit
+  const onFinish = async (values) => {
+    const formData = new FormData();
+    if (fileList.length > 0) {
+      formData.append("image", fileList[0].originFileObj);
+    }
+    formData.append("name", values.categoryName);
+
+    try {
+      const response = await createCategory(formData).unwrap();
+      message.success("Category created successfully!");
+      console.log("Response:", response);
+      form.resetFields();
+      setFileList([]);
+      handleClose();
+    } catch (error) {
+      console.error("Category Creation Failed:", error);
+      message.error("Failed to create category.");
+    }
   };
 
   return (
@@ -60,19 +85,24 @@ const AddCategoryModal = ({ isModalOpen, handleClose, record }) => {
         footer={null}
         closable
       >
-        <Form layout="vertical" className="flex flex-col gap-1">
-          {/* Upload Component with white background */}
+        <Form
+          layout="vertical"
+          onFinish={onFinish}
+          form={form}
+          className="flex flex-col gap-1"
+        >
+          {/* Upload Component */}
           <Form.Item>
             <Upload
-              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
               listType="picture-card"
               fileList={fileList}
               onPreview={handlePreview}
               onChange={handleChange}
+              beforeUpload={() => false} // Prevent automatic upload
             >
               {fileList.length >= 1 ? null : (
                 <div className="w-full flex items-center justify-center">
-                  <div className="text-black flex flex-col items-center ">
+                  <div className="text-black flex flex-col items-center">
                     <BiCloudUpload size={25} />
                     Upload
                   </div>
@@ -99,23 +129,18 @@ const AddCategoryModal = ({ isModalOpen, handleClose, record }) => {
             </Form.Item>
           )}
 
-          {/* Category Name Form */}
+          {/* Category Name Input */}
           <Form.Item
             label="Category Name"
             name="categoryName"
-            rules={[
-              {
-                required: true,
-                message: "Enter your Category Name",
-              },
-            ]}
+            rules={[{ required: true, message: "Enter your Category Name" }]}
           >
             <Input className="h-9" />
           </Form.Item>
 
           {/* Save Button */}
           <Form.Item>
-            <Button block className="h-9">
+            <Button block className="h-9" htmlType="submit">
               Save
             </Button>
           </Form.Item>

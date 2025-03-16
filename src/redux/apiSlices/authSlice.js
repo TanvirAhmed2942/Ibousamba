@@ -1,6 +1,7 @@
 import { api } from "../api/baseApi";
 
 const forgetToken = localStorage.getItem("forgetToken");
+const forgetOtpMatchToken = localStorage.getItem("forgetOtpMatchToken");
 
 const authSlice = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -45,9 +46,12 @@ const authSlice = api.injectEndpoints({
     resetPassword: builder.mutation({
       query: (value) => {
         return {
-          method: "POST",
-          url: "/auth/reset-password",
+          method: "PATCH",
+          url: "/auth/forgot-password-reset",
           body: value,
+          headers: {
+            token: forgetOtpMatchToken,
+          },
         };
       },
     }),
@@ -62,6 +66,9 @@ const authSlice = api.injectEndpoints({
               localStorage.getItem("token")
             )}`,
           },
+          // headers: {
+          //   token: forgetOtpMatchToken,
+          // },
         };
       },
     }),

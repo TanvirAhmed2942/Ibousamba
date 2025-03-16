@@ -29,6 +29,8 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+export const imageUrl = "http://10.0.70.36:8011/";
+
 export const api = createApi({
   baseQuery,
   endpoints: () => ({}),

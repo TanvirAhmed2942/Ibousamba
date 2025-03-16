@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Input,
@@ -8,41 +8,74 @@ import {
   Upload,
   Image,
 } from "antd";
-import { EditOutlined } from "@ant-design/icons"; // Edit icon from Ant Design
+import { EditOutlined } from "@ant-design/icons";
+import { imageUrl } from "../../../../redux/api/baseApi";
 
 const EditDeleteCategoryModal = ({
   visible,
   onCancel,
-  onOk,
   mode,
   record,
   onCategoryChange,
-  handleClose,
+  onDelete,
 }) => {
-  const [categoryName, setCategoryName] = useState(
-    record ? record.category : ""
-  );
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState(
-    record ? record.categoryImg : ""
-  );
-  const [isEditingImage, setIsEditingImage] = useState(false); // Flag to toggle between static image and upload component
+  const [previewImage, setPreviewImage] = useState("");
+  const [isEditingImage, setIsEditingImage] = useState(false);
+  const [imageBase64, setImageBase64] = useState("");
 
-  const handleOk = () => {
-    if (mode === "edit") {
-      onCategoryChange(categoryName, fileList);
+  // Update form and state when record or visibility changes
+  useEffect(() => {
+    if (record && visible) {
+      form.setFieldsValue({
+        categoryName: record.name || "",
+      });
+      setPreviewImage(`${imageUrl}${record.image}`);
+      setIsEditingImage(false);
+      setFileList([]);
+      setImageBase64("");
     }
-    onOk();
+  }, [record, visible, form]);
+
+  // Convert file to base64
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
-  const handlePreview = async (file) => {
-    setPreviewImage(file.url || file.thumbUrl);
+  // Handle save button click
+  const handleSave = async () => {
+    try {
+      const values = await form.validateFields();
+      const updatedName = values.categoryName;
+
+      // Submit both the name and image (if changed)
+      onCategoryChange(updatedName, imageBase64);
+    } catch (errorInfo) {
+      console.log("Validation failed:", errorInfo);
+    }
   };
 
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  // Handle file changes (uploading a new image)
+  const handleChange = async ({ fileList: newFileList }) => {
+    setFileList(newFileList);
 
+    // If there's a file, convert it to base64
+    if (newFileList.length > 0 && newFileList[0].originFileObj) {
+      const base64 = await getBase64(newFileList[0].originFileObj);
+      setImageBase64(base64);
+      setPreviewImage(base64); // Also update preview
+    }
+  };
+
+  // Toggle between displaying the image and uploading a new one
   const handleEditClick = () => {
-    setIsEditingImage(true); // Enable the upload view when the edit icon is clicked
+    setIsEditingImage(true);
   };
 
   return (
@@ -61,41 +94,48 @@ const EditDeleteCategoryModal = ({
       }}
     >
       <Modal
-        title={mode === "edit" ? "Edit Category" : null}
-        visible={visible}
+        title={mode === "edit" ? "Edit Category" : "Delete Category"}
+        open={visible}
         onCancel={onCancel}
-        closable={false}
-        onOk={handleOk}
+        closable={true}
         footer={
-          mode === "delete"
+          mode === "edit"
             ? [
-                <div className="w-full flex items-center justify-center gap-2">
-                  <Button key="cancel" onClick={handleClose}>
+                <Button key="cancel" onClick={onCancel}>
+                  Cancel
+                </Button>,
+                <Button key="save" type="primary" onClick={handleSave}>
+                  Save
+                </Button>,
+              ]
+            : [
+                <div
+                  key="footer"
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <Button key="cancel" onClick={onCancel}>
                     Cancel
                   </Button>
-
-                  <Button key="delete" type="primary" danger onClick={handleOk}>
+                  <Button key="delete" type="primary" danger onClick={onDelete}>
                     Delete
                   </Button>
                 </div>,
               ]
-            : null
         }
       >
         {mode === "edit" ? (
           <div>
-            <Form layout="vertical" className="flex flex-col gap-1">
-              {/* Static Image Initially Displayed */}
+            <Form form={form} layout="vertical" className="flex flex-col gap-1">
+              {/* Image Display/Upload */}
               {!isEditingImage ? (
                 <Form.Item>
                   <div className="flex justify-center relative">
-                    {/* Static image displayed initially */}
                     <Image
                       preview={false}
                       src={previewImage}
                       style={{ width: "100%", maxWidth: 300 }}
+                      alt="Category"
                     />
-                    {/* Edit button */}
                     <Button
                       onClick={handleEditClick}
                       className="absolute top-0 right-0"
@@ -106,14 +146,12 @@ const EditDeleteCategoryModal = ({
                   </div>
                 </Form.Item>
               ) : (
-                // Upload Component when clicked on Edit
                 <Form.Item>
                   <Upload
-                    action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                     listType="picture-card"
                     fileList={fileList}
-                    onPreview={handlePreview}
                     onChange={handleChange}
+                    beforeUpload={() => false} // Prevent auto upload
                   >
                     {fileList.length >= 1 ? null : (
                       <div className="w-full flex items-center justify-center">
@@ -135,18 +173,7 @@ const EditDeleteCategoryModal = ({
                   },
                 ]}
               >
-                <Input
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  className="h-9"
-                />
-              </Form.Item>
-
-              {/* Save Button */}
-              <Form.Item>
-                <Button block className="h-9" onClick={handleOk}>
-                  Save
-                </Button>
+                <Input className="h-9" />
               </Form.Item>
             </Form>
           </div>
@@ -154,7 +181,7 @@ const EditDeleteCategoryModal = ({
           <div className="w-full flex items-center justify-center">
             <p className="text-black my-2">
               Are you sure you want to delete the category{" "}
-              <strong>{record?.category}</strong>?
+              <strong>{record?.name}</strong>?
             </p>
           </div>
         )}

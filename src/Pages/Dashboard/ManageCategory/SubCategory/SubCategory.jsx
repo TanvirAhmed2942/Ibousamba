@@ -3,8 +3,9 @@ import { ConfigProvider, Button, Select, Table } from "antd";
 import { IoEye } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import AddSubCategoryModal from "./AddSubCategoryModal";
-import { MdArrowDropDownCircle, MdOutlineArrowDropDown } from "react-icons/md";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 import SubCategoryTable from "./SubCategoryTable";
+import { useCategoryQuery } from "../../../../redux/apiSlices/categorySlice";
 
 const { Option } = Select; // Extract Option from Select
 
@@ -12,6 +13,10 @@ const SubCategory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryID, setCategoryID] = useState(null);
+  const { data } = useCategoryQuery();
+
+  // console.log("data", data?.data);
 
   const showModal = (record = null) => {
     setSelectedRecord(record);
@@ -25,6 +30,8 @@ const SubCategory = () => {
 
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
+    setCategoryID(value);
+    // console.log("Selected Category ID:", value);
   };
 
   const columns = [
@@ -93,27 +100,20 @@ const SubCategory = () => {
           <div className="w-1/2 flex gap-4 items-center">
             <p className="text-[24px]">Select Category</p>
             <Select
-              className="flex items-center gap-2  w-40 border rounded-md"
-              s
+              className="flex items-center gap-2 w-40 border rounded-md"
               suffixIcon={
                 <MdOutlineArrowDropDown size={25} className="text-white" />
               }
-              placeholder="Category"
-              options={[
-                {
-                  value: "1",
-                  label: "Jack",
-                },
-                {
-                  value: "2",
-                  label: "Lucy",
-                },
-                {
-                  value: "3",
-                  label: "Tom",
-                },
-              ]}
-            />
+              placeholder="Select a Category"
+              value={selectedCategory} // Bind selected value
+              onChange={handleCategoryChange} // Handle change
+            >
+              {data?.data?.map((category) => (
+                <Option key={category._id} value={category._id}>
+                  {category.name}
+                </Option>
+              ))}
+            </Select>
           </div>
           <Button
             className="h-10 rounded-lg font-semibold mb-4"
@@ -139,7 +139,7 @@ const SubCategory = () => {
             },
           }}
         >
-          <SubCategoryTable />
+          <SubCategoryTable categoryID={categoryID} />
         </ConfigProvider>
 
         {/* Modal Component */}
