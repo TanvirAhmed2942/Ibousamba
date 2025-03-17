@@ -46,7 +46,7 @@ export const UserProvider = ({ children }) => {
   const { data: profile } = useProfileQuery();
   const [user, setUser] = useState(null);
 
-  console.log("Profile Data:", profile?.data);
+  // console.log("Profile Data:", profile?.data);
 
   useEffect(() => {
     if (profile) {

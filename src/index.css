@@ -548,3 +548,7 @@ span.anticon.anticon-right.ant-collapse-arrow {
   .ant-pagination-item-ellipsis {
   color: #a3a3a3;
 }
+
+.ant-form.css-dev-only-do-not-override-n6xf7a {
+  opacity: 1 !important;
+}

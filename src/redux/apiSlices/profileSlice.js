@@ -3,7 +3,7 @@ import { api } from "../api/baseApi";
 const profileSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     updateProfile: builder.mutation({
-      query: ({ id, data }) => {
+      query: ({ data }) => {
         return {
           url: `/users/update-my-profile`,
           method: "PATCH",
