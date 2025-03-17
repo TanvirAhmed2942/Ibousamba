@@ -1,52 +1,54 @@
 import React from "react";
-import { Form, Input, Card, Flex, ConfigProvider, message, Button } from "antd";
+import { Form, Input, Card, ConfigProvider, message, Button } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import ButtonEDU from "../../../components/common/ButtonEDU";
-
+import { useChangePasswordMutation } from "../../../redux/apiSlices/authSlice";
+import { useNavigate } from "react-router-dom";
 function AdminPassword() {
   const [form] = Form.useForm(); // Form instance
-
+  const navigate = useNavigate();
   // Handle cancel: Reset form fields
   const handleCancel = () => {
     form.resetFields();
     message.info("Password change cancelled.");
   };
 
-  // Handle save: Validate, trim, and submit form
-  // const handleSave = async () => {
-  //   try {
-  //     const values = await form.validateFields();
-  //     const trimmedValues = {
-  //       currentPassword: values.currentPassword.trim(),
-  //       newPassword: values.newPassword.trim(),
-  //       confirmPassword: values.confirmPassword.trim(),
-  //     };
-
-  //     console.log("Password Updated:", trimmedValues);
-
-  //     // Replace this with an API call to update the password
-  //     message.success("Password updated successfully!");
-
-  //     form.resetFields(); // Clear form after successful update
-  //   } catch (error) {
-  //     console.error("Validation failed:", error);
-  //   }
-  // };
-
+  const [changePassword] = useChangePasswordMutation();
+  // Form submission (onFinish handler)
   const onFinish = async (values) => {
-    console.log(values);
     try {
-      const response = await login({
-        email: values.email,
-        password: values.password,
-      }).unwrap();
+      // Trim the values
+      const trimmedValues = {
+        currentPassword: values.currentPassword.trim(),
+        newPassword: values.newPassword.trim(),
+        confirmPassword: values.confirmPassword.trim(),
+      };
 
-      console.log("Login Success:", response);
-      navigate(`/auth/login`);
-    } catch (err) {
-      console.error("Login Failed:", err);
+      console.log("Password Updated:", trimmedValues);
+
+      const response = await changePassword({
+        oldPassword: trimmedValues.currentPassword,
+        newPassword: trimmedValues.newPassword,
+      });
+
+      console.log(response);
+      if (response.data.success) {
+        navigate(`/auth/login`);
+      } else {
+        message.error("Failed to update password.");
+      }
+
+      // Replace this with an API call to update the password
+      // Example: const response = await someApiCall(trimmedValues);
+
+      message.success("Password updated successfully!");
+
+      form.resetFields(); // Clear form after successful update
+    } catch (error) {
+      console.error("Validation failed:", error);
+      message.error("Failed to update password.");
     }
   };
+
   return (
     <ConfigProvider
       theme={{
@@ -101,11 +103,6 @@ function AdminPassword() {
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
               className="bg-[1f1f1f] border-none h-12 text-slate-300"
-              // style={{
-              //   backgroundColor: "black", // Ensures background stays black
-              //   color: "white",
-              //   border: "1px solid #555",
-              // }}
             />
           </Form.Item>
 
@@ -128,11 +125,6 @@ function AdminPassword() {
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
               className="bg-[1f1f1f] border-none h-12 text-slate-300"
-              // style={{
-              //   backgroundColor: "black", // Ensures background stays black
-              //   color: "white",
-              //   border: "1px solid #555",
-              // }}
             />
           </Form.Item>
 
@@ -163,25 +155,20 @@ function AdminPassword() {
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
               className="bg-[1f1f1f] border-none h-12 text-slate-300"
-              // style={{
-              //   backgroundColor: "black", // Ensures background stays black
-              //   color: "white",
-              //   border: "1px solid #555",
-              // }}
             />
-          </Form.Item>
-          <Form.Item className="w-full">
-            <div className="w-[90%]  flex items-center justify-end gap-4 ">
-              <Button className="bg-samba border-none">Cancel</Button>
-              <Button className="bg-samba border-none">Save</Button>
-            </div>
           </Form.Item>
 
           {/* Buttons: Cancel & Save */}
-          {/* <Flex justify="flex-end" className="w-[80%] gap-4">
-            <ButtonEDU actionType="cancel" onClick={handleCancel} />
-            <ButtonEDU actionType="save" onClick={handleSave} />
-          </Flex> */}
+          <Form.Item className="w-full">
+            <div className="w-[90%] flex items-center justify-end gap-4">
+              <Button className="bg-samba border-none" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button className="bg-samba border-none" htmlType="submit">
+                Save
+              </Button>
+            </div>
+          </Form.Item>
         </Form>
       </Card>
     </ConfigProvider>
