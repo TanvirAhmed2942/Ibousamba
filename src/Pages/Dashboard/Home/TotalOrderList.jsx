@@ -133,7 +133,12 @@ function TotalOrderList() {
         },
       }}
     >
-      <Table dataSource={dataSource} columns={columns} pagination={false} />
+      <Table
+        size="small"
+        dataSource={dataSource}
+        columns={columns}
+        pagination={false}
+      />
     </ConfigProvider>
   );
 }
