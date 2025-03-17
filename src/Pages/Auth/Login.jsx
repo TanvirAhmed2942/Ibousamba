@@ -7,21 +7,20 @@ import { useLoginMutation } from "../../redux/apiSlices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [changePassword, { isLoading, error }] = useChangePasswordMutation();
 
   const onFinish = async (values) => {
     console.log(values);
     try {
-      const response = await login({
-        email: values.email,
+      const response = await changePassword({
         password: values.password,
       }).unwrap();
 
-      console.log("Login Success:", response);
+      console.log("Password Change:", response);
       localStorage.setItem("token", JSON.stringify(response.data.accessToken));
       navigate("/");
     } catch (err) {
-      console.error("Login Failed:", err);
+      console.error("Password Change Failed:", err);
     }
   };
 

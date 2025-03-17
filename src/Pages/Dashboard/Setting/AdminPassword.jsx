@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Card, Flex, ConfigProvider, message } from "antd";
+import { Form, Input, Card, Flex, ConfigProvider, message, Button } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import ButtonEDU from "../../../components/common/ButtonEDU";
 
@@ -13,26 +13,40 @@ function AdminPassword() {
   };
 
   // Handle save: Validate, trim, and submit form
-  const handleSave = async () => {
+  // const handleSave = async () => {
+  //   try {
+  //     const values = await form.validateFields();
+  //     const trimmedValues = {
+  //       currentPassword: values.currentPassword.trim(),
+  //       newPassword: values.newPassword.trim(),
+  //       confirmPassword: values.confirmPassword.trim(),
+  //     };
+
+  //     console.log("Password Updated:", trimmedValues);
+
+  //     // Replace this with an API call to update the password
+  //     message.success("Password updated successfully!");
+
+  //     form.resetFields(); // Clear form after successful update
+  //   } catch (error) {
+  //     console.error("Validation failed:", error);
+  //   }
+  // };
+
+  const onFinish = async (values) => {
+    console.log(values);
     try {
-      const values = await form.validateFields();
-      const trimmedValues = {
-        currentPassword: values.currentPassword.trim(),
-        newPassword: values.newPassword.trim(),
-        confirmPassword: values.confirmPassword.trim(),
-      };
+      const response = await login({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
 
-      console.log("Password Updated:", trimmedValues);
-
-      // Replace this with an API call to update the password
-      message.success("Password updated successfully!");
-
-      form.resetFields(); // Clear form after successful update
-    } catch (error) {
-      console.error("Validation failed:", error);
+      console.log("Login Success:", response);
+      navigate(`/auth/login`);
+    } catch (err) {
+      console.error("Login Failed:", err);
     }
   };
-
   return (
     <ConfigProvider
       theme={{
@@ -65,6 +79,7 @@ function AdminPassword() {
       >
         <Form
           form={form}
+          onFinish={onFinish}
           layout="vertical"
           className="h-auto flex flex-col items-center justify-evenly"
         >
@@ -155,12 +170,18 @@ function AdminPassword() {
               // }}
             />
           </Form.Item>
+          <Form.Item className="w-full">
+            <div className="w-[90%]  flex items-center justify-end gap-4 ">
+              <Button className="bg-samba border-none">Cancel</Button>
+              <Button className="bg-samba border-none">Save</Button>
+            </div>
+          </Form.Item>
 
           {/* Buttons: Cancel & Save */}
-          <Flex justify="flex-end" className="w-[80%] gap-4">
+          {/* <Flex justify="flex-end" className="w-[80%] gap-4">
             <ButtonEDU actionType="cancel" onClick={handleCancel} />
             <ButtonEDU actionType="save" onClick={handleSave} />
-          </Flex>
+          </Flex> */}
         </Form>
       </Card>
     </ConfigProvider>

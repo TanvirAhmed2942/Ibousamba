@@ -28,6 +28,7 @@ import Faq from "../Pages/Dashboard/Faq/Faq.jsx";
 import Brands from "../Pages/Dashboard/Brands/Brands.jsx";
 import Inquiry from "../Pages/Dashboard/Inquiry/Inquiry.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
+import Contact from "../Pages/Dashboard/Contact/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
       {
         path: "/setting",
         element: <Setting />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
     ],
   },

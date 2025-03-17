@@ -5,6 +5,7 @@ import {
   FaClipboardList,
   FaHandHoldingDollar,
   FaQuoteRight,
+  FaUsers,
 } from "react-icons/fa6";
 import { TbBellBolt, TbDashboard, TbListDetails } from "react-icons/tb";
 import { RxDashboard } from "react-icons/rx";
@@ -218,15 +219,16 @@ const Sidebar = ({ isCollapsed }) => {
             },
           ],
     },
-    // {
-    //   key: "/logout",
-    //   icon: <FiLogOut size={24} />,
-    //   label: isCollapsed ? null : (
-    //     <p onClick={handleLogout} className="text-white hover:text-white">
-    //       Logout
-    //     </p>
-    //   ),
-    // },
+
+    {
+      key: "/contact",
+      icon: <FaUsers size={25} />,
+      label: isCollapsed ? (
+        <Link to="/contact">Contact</Link>
+      ) : (
+        <Link to="/contact">Contact</Link>
+      ),
+    },
   ];
 
   useEffect(() => {

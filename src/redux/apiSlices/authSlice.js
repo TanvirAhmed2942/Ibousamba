@@ -58,14 +58,14 @@ const authSlice = api.injectEndpoints({
     changePassword: builder.mutation({
       query: (data) => {
         return {
-          method: "POST",
+          method: "PATCH",
           url: "/auth/change-password",
           body: data,
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token")
-            )}`,
-          },
+          // headers: {
+          //   Authorization: `Bearer ${JSON.parse(
+          //     localStorage.getItem("token")
+          //   )}`,
+          // },
           // headers: {
           //   token: forgetOtpMatchToken,
           // },

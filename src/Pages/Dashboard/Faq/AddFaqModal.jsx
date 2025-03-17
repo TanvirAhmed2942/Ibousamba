@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form, Input, Button } from "antd";
 
-function AddFaqModal({ isOpen, onClose, onSave }) {
+function AddFaqModal({ isOpen, onClose, onSave, faq }) {
   const [form] = Form.useForm();
+
+  // When the modal opens for editing, populate the form with the selected FAQ data
+  useEffect(() => {
+    if (faq) {
+      form.setFieldsValue({
+        question: faq.title,
+        answer: faq.description,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [faq, form, isOpen]);
 
   const handleSave = () => {
     form
       .validateFields()
       .then((values) => {
-        onSave(values); // Send FAQ data to parent
+        onSave({
+          title: values.question,
+          description: values.answer,
+        }); // Send mapped FAQ data to parent
         form.resetFields(); // Reset fields after save
       })
       .catch((info) => {
@@ -18,9 +33,9 @@ function AddFaqModal({ isOpen, onClose, onSave }) {
 
   return (
     <Modal
-      title="Add FAQ"
+      title={faq ? "Edit FAQ" : "Add FAQ"} // Change title based on edit or add
       closable={true}
-      visible={isOpen}
+      open={isOpen} // Changed from visible to open
       onCancel={onClose}
       footer={[
         <Button
