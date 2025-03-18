@@ -1,78 +1,248 @@
+// import React, { useState, useEffect } from "react";
+// import { FiEdit, FiPlusCircle } from "react-icons/fi";
+// import { RiDeleteBin4Line } from "react-icons/ri";
+// import AddBrandModal from "./AddBrandModal";
+// import {
+//   useBrandQuery,
+//   useCreateBrandMutation,
+//   useUpdateBrandMutation,
+// } from "../../../redux/apiSlices/brandSlice";
+// import { imageUrl } from "../../../redux/api/baseApi";
+
+// function Brands() {
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [selectedBrand, setSelectedBrand] = useState(null);
+//   const responsed = useUpdateBrandMutation(id,data)
+//   const responseu = useUpdateBrandMutation(id,data)
+
+//   // Fetch brands
+//   const {
+//     data: brandData,
+//     isLoading,
+//     error,
+//     refetch, // Will be used to refresh data after adding a brand
+//   } = useBrandQuery();
+
+//   // Store brands in state
+//   const [brandList, setBrandList] = useState([]);
+
+//   useEffect(() => {
+//     if (brandData?.data) {
+//       setBrandList(brandData.data);
+//     }
+//   }, [brandData]);
+
+//   const [createBrand, { isLoading: isCreating }] = useCreateBrandMutation();
+
+//   const handleCreateBrand = async () => {
+//     try {
+//       const response = await createBrand({ name: "New Brand" }).unwrap();
+//       if (response?.data) {
+//         setBrandList((prevList) => [...prevList, response.data]);
+//       }
+//       refetch();
+//     } catch (error) {
+//       console.error("❌ Create Brand Error:", error);
+//     }
+//   };
+
+//   // Open modal to add brand
+//   const handleAddBrand = () => {
+//     setSelectedBrand(null);
+//     setIsModalOpen(true);
+//   };
+
+//   // Open modal to edit brand
+//   const handleEditBrand = (brand) => {
+//     setSelectedBrand(brand);
+//     setIsModalOpen(true);
+//   };
+
+//   // Delete a brand
+//   const handleDelete = (id) => {
+//     setBrandList(brandList.filter((brand) => brand.id !== id));
+//   };
+
+//   // Save brand (add/edit)
+//   const handleSaveBrand = (brand) => {
+//     if (selectedBrand) {
+//       setBrandList(
+//         brandList.map((b) =>
+//           b.id === selectedBrand.id ? { ...b, ...brand } : b
+//         )
+//       );
+//     } else {
+//       setBrandList([...brandList, { ...brand, id: brandList.length + 1 }]);
+//     }
+
+//     setIsModalOpen(false);
+//     refetch();
+//   };
+
+//   if (isLoading) return <div>Loading brands...</div>;
+//   if (error) return <div>Error loading brands</div>;
+
+//   return (
+//     <div className="flex items-center justify-start gap-2 flex-wrap px-3 py-4">
+//       {/* Add New Brand Button */}
+//       <div
+//         onClick={handleAddBrand}
+//         className="flex flex-col items-center justify-center gap-1 w-44 h-40 border-2 rounded-lg border-dashed cursor-pointer"
+//       >
+//         <FiPlusCircle size={40} className="text-white" />
+//         <p>Add New</p>
+//       </div>
+
+//       {/* Brand List */}
+//       {brandList.map((brand) => (
+//         <BrandItem
+//           key={brand._id}
+//           brand={brand}
+//           onEdit={handleEditBrand}
+//           onDelete={handleDelete}
+//         />
+//       ))}
+
+//       {/* Add/Edit Brand Modal */}
+//       <AddBrandModal
+//         isModalOpen={isModalOpen}
+//         handleClose={() => setIsModalOpen(false)}
+//         handleSave={handleSaveBrand}
+//         initialBrand={selectedBrand}
+//       />
+//     </div>
+//   );
+// }
+
+// function BrandItem({ brand, onEdit, onDelete }) {
+//   const [isHovered, setIsHovered] = useState(false);
+
+//   return (
+//     <div
+//       className="flex items-center justify-center gap-4 w-44 h-40 border rounded-lg relative"
+//       onMouseEnter={() => setIsHovered(true)}
+//       onMouseLeave={() => setIsHovered(false)}
+//     >
+//       <img
+//         src={`${imageUrl}${brand?.image || ""}`}
+//         width={150}
+//         alt={brand.name}
+//       />
+//       {isHovered && (
+//         <div className="w-full h-full flex gap-2.5 items-center justify-center absolute top-0 left-0 rounded-lg backdrop-blur-sm bg-black bg-opacity-50">
+//           <FiEdit
+//             className="text-white cursor-pointer"
+//             onClick={() => onEdit(brand._id)}
+//           />
+//           <RiDeleteBin4Line
+//             className="text-white cursor-pointer"
+//             onClick={() => onDelete(brand._id)}
+//           />
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Brands;
+
 import React, { useState, useEffect } from "react";
 import { FiEdit, FiPlusCircle } from "react-icons/fi";
-import AddBrandModal from "./AddBrandModal";
 import { RiDeleteBin4Line } from "react-icons/ri";
+import AddBrandModal from "./AddBrandModal";
 import {
   useBrandQuery,
   useCreateBrandMutation,
+  useUpdateBrandMutation,
+  useDeleteBrandMutation,
 } from "../../../redux/apiSlices/brandSlice";
 import { imageUrl } from "../../../redux/api/baseApi";
+import { message } from "antd";
 
 function Brands() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hoveredBrand, setHoveredBrand] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
+
+  // API hooks
+  const [createBrand] = useCreateBrandMutation();
+  const [updateBrand] = useUpdateBrandMutation();
+  const [deleteBrand] = useDeleteBrandMutation();
+
+  // Fetch brands
+  const { data: brandData, isLoading, error, refetch } = useBrandQuery();
+
+  // Store brands in state
   const [brandList, setBrandList] = useState([]);
 
-  // Fetch brand data from API
-  const { data: brandData, isLoading, error } = useBrandQuery();
-
-  // Only update brandList if brandData is available
   useEffect(() => {
-    if (brandData) {
+    if (brandData?.data) {
       setBrandList(brandData.data);
     }
   }, [brandData]);
 
-  const [createBrand] = useCreateBrandMutation();
-
   const handleCreateBrand = async () => {
     try {
-      const response = await createBrand({ name: "New Brand" });
-      console.log("Create Brand Success:", response);
-      setBrandList([...brandList, response.data]);
+      const response = await createBrand({ name: "New Brand" }).unwrap();
+      if (response?.data) {
+        setBrandList((prevList) => [...prevList, response.data]);
+      }
+      refetch();
     } catch (error) {
-      console.error("Create Brand Error:", error);
+      console.error("❌ Create Brand Error:", error);
     }
   };
 
-  // Open Modal for Adding
+  // Open modal to add brand
   const handleAddBrand = () => {
     setSelectedBrand(null);
     setIsModalOpen(true);
   };
 
-  // Open Modal for Editing
+  // Open modal to edit brand
   const handleEditBrand = (brand) => {
     setSelectedBrand(brand);
     setIsModalOpen(true);
   };
 
-  // Delete Brand
-  const handleDelete = (key) => {
-    setBrandList(brandList.filter((brand) => brand.key !== key));
+  // Delete a brand
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteBrand(id).unwrap();
+      if (response.success) {
+        message.success("Brand deleted successfully!");
+        refetch();
+      }
+      setBrandList(brandList.filter((brand) => brand.id !== id));
+    } catch (error) {
+      console.error("❌ Delete Brand Error:", error);
+    }
   };
 
-  // Save Brand (Add or Edit)
-  const handleSaveBrand = (brand) => {
-    console.log("Brand data received from modal:", brand); // Log the brand data
-
+  // Save brand (add/edit)
+  const handleSaveBrand = async (brand) => {
     if (selectedBrand) {
-      // Update existing brand
-      setBrandList(
-        brandList.map((b) =>
-          b.key === selectedBrand.key ? { ...b, ...brand } : b
-        )
-      );
+      try {
+        const updatedBrand = await updateBrand({
+          id: selectedBrand.id,
+          data: brand,
+        }).unwrap();
+        setBrandList(
+          brandList.map((b) =>
+            b.id === selectedBrand.id ? { ...b, ...updatedBrand.data } : b
+          )
+        );
+      } catch (error) {
+        console.error("❌ Update Brand Error:", error);
+      }
     } else {
-      // Add new brand
-      setBrandList([...brandList, { ...brand, key: brandList.length + 1 }]);
+      setBrandList([...brandList, { ...brand, id: brandList.length + 1 }]);
     }
 
     setIsModalOpen(false);
+    refetch();
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading brands...</div>;
   if (error) return <div>Error loading brands</div>;
 
   return (
@@ -88,30 +258,12 @@ function Brands() {
 
       {/* Brand List */}
       {brandList.map((brand) => (
-        <div
-          key={brand.key}
-          className="flex items-center justify-center gap-4 w-44 h-40 border rounded-lg relative"
-          onMouseEnter={() => setHoveredBrand(brand.key)} // Trigger hover effect only
-          onMouseLeave={() => setHoveredBrand(null)}
-        >
-          <img
-            src={`${imageUrl}${brand?.image}`}
-            width={150}
-            alt={brand.name}
-          />
-          {hoveredBrand === brand.key && (
-            <div className="w-full h-full flex gap-2.5 items-center justify-center absolute top-0 left-0 rounded-lg backdrop-blur-sm bg-black bg-opacity-50">
-              <FiEdit
-                className="text-white cursor-pointer"
-                onClick={() => handleEditBrand(brand)}
-              />
-              <RiDeleteBin4Line
-                className="text-white cursor-pointer"
-                onClick={() => handleDelete(brand.key)}
-              />
-            </div>
-          )}
-        </div>
+        <BrandItem
+          key={brand._id}
+          brand={brand}
+          onEdit={handleEditBrand}
+          onDelete={handleDelete}
+        />
       ))}
 
       {/* Add/Edit Brand Modal */}
@@ -121,6 +273,36 @@ function Brands() {
         handleSave={handleSaveBrand}
         initialBrand={selectedBrand}
       />
+    </div>
+  );
+}
+
+function BrandItem({ brand, onEdit, onDelete }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className="flex items-center justify-center gap-4 w-44 h-40 border rounded-lg relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <img
+        src={`${imageUrl}${brand?.image || ""}`}
+        width={150}
+        alt={brand.name}
+      />
+      {isHovered && (
+        <div className="w-full h-full flex gap-2.5 items-center justify-center absolute top-0 left-0 rounded-lg backdrop-blur-sm bg-black bg-opacity-50">
+          <FiEdit
+            className="text-white cursor-pointer"
+            onClick={() => onEdit(brand._id)}
+          />
+          <RiDeleteBin4Line
+            className="text-white cursor-pointer"
+            onClick={() => onDelete(brand._id)}
+          />
+        </div>
+      )}
     </div>
   );
 }
