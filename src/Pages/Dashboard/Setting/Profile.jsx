@@ -104,74 +104,71 @@ const ProfileDetails = ({
   const { updateUser } = useUser(); // Assuming you have an updateUser function in your user provider
   const [updateProfile, { isLoading, isError }] = useUpdateProfileMutation();
 
-  const handleFinish = async (values) => {
-    try {
-      // Create a FormData object to send all data including the image
-      const formData = new FormData();
-
-      // Append all form values to FormData, including 'role'
-      Object.keys(values).forEach((key) => {
-        // Only append key-value pairs where the value is not null or undefined
-        if (values[key] !== null && values[key] !== undefined) {
-          formData.append(key, values[key]);
-        }
-      });
-
-      // Append the uploaded image if present
-      if (uploadedImage) {
-        formData.append("image", uploadedImage); // Add the image to FormData
-      }
-
-      // Log FormData content (for debugging)
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
-
-      // Using await with the API call to update the profile
-      const response = await updateProfile(formData).unwrap(); // unwrap the response to get the actual result
-
-      // If the response is successful, update the state
-      if (response) {
-        message.success("Profile updated successfully");
-        setIsEditing(false); // Exit editing mode
-      }
-    } catch (error) {
-      // Catch any errors that occur in the try block
-      console.error("Error updating profile:", error);
-      message.error("Failed to update profile: " + error.message);
-    }
-  };
-
   // const handleFinish = async (values) => {
   //   try {
+  //     // Create a FormData object to send all data including the image
   //     const formData = new FormData();
 
-  //     // Append form values, excluding image for now
+  //     // Append all form values to FormData, including 'role'
   //     Object.keys(values).forEach((key) => {
+  //       // Only append key-value pairs where the value is not null or undefined
   //       if (values[key] !== null && values[key] !== undefined) {
   //         formData.append(key, values[key]);
   //       }
   //     });
 
-  //     // Log the FormData content
+  //     // Append the uploaded image if present
+  //     if (uploadedImage) {
+  //       formData.append("image", uploadedImage); // Add the image to FormData
+  //     }
+
+  //     // Log FormData content (for debugging)
   //     formData.forEach((value, key) => {
   //       console.log(key, value);
   //     });
 
-  //     // Make the API request without the image
-  //     const response = await updateProfile(formData).unwrap();
+  //     // Using await with the API call to update the profile
+  //     const response = await updateProfile(formData).unwrap(); // unwrap the response to get the actual result
 
+  //     // If the response is successful, update the state
   //     if (response) {
   //       message.success("Profile updated successfully");
-  //       setIsEditing(false);
+  //       setIsEditing(false); // Exit editing mode
   //     }
   //   } catch (error) {
+  //     // Catch any errors that occur in the try block
   //     console.error("Error updating profile:", error);
-  //     message.error(
-  //       `Failed to update profile: ${error.message || "Unknown error"}`
-  //     );
+  //     message.error("Failed to update profile: " + error.message);
   //   }
   // };
+
+  const handleFinish = async (values) => {
+    try {
+      // Create a FormData object
+      const formData = new FormData();
+
+      // Append only allowed fields: name, phone, and image
+      if (values.name) formData.append("name", values.name);
+      if (values.phone) formData.append("phone", values.phone);
+      if (uploadedImage) formData.append("image", uploadedImage);
+
+      // Log FormData content for debugging
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
+
+      // API call to update the profile
+      const response = await updateProfile(formData).unwrap();
+
+      if (response) {
+        message.success("Profile updated successfully");
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      message.error("Failed to update profile: " + error.message);
+    }
+  };
 
   return (
     <ConfigProvider
@@ -235,7 +232,7 @@ const ProfileDetails = ({
           >
             <Input
               className="bg-[1f1f1f] border-none h-12 text-slate-300"
-              readOnly={!isEditing}
+              readOnly
             />
           </Form.Item>
         </div>

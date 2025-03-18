@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Avatar, ConfigProvider, Input } from "antd";
 import { FiEdit, FiPlusCircle } from "react-icons/fi";
-
 import AddProductModal from "./AddProductModal";
 import { SearchOutlined } from "@ant-design/icons";
-
 import { MdDeleteOutline } from "react-icons/md";
 import DeleteModal from "./DeleteModal";
+import { useProductQuery } from "../../../redux/apiSlices/productSlice";
+import { imageUrl } from "../../../redux/api/baseApi";
 
 function ProductList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +15,21 @@ function ProductList() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  // Fetch products using the useProductQuery hook
+  const { data, isLoading, isError, error } = useProductQuery();
+
+  // Log products when the data is fetched
+  useEffect(() => {
+    if (data) {
+      console.log("Fetched products:", data?.data?.result);
+      setProducts(data?.data?.result); // Set the fetched data to the products state
+    }
+
+    if (isError) {
+      console.error("Error fetching products:", error);
+    }
+  }, [data, isError, error]);
 
   const showEditModal = (product) => {
     setSelectedProduct(product);
@@ -94,9 +109,6 @@ function ProductList() {
                 colorPrimaryBorder: "transparent",
                 boxShadow: "none",
               },
-              // Button: {
-              //   defaultHoverBorderColor: "#a01d25",
-              // },
             },
           }}
         >
@@ -147,7 +159,6 @@ function ProductList() {
             dataSource={dataSource}
             columns={columns(showEditModal, showDeleteModal)}
             pagination={{
-              // onChange: cancel,
               defaultPageSize: 5,
               position: ["bottomRight"],
               size: "default",
@@ -216,50 +227,51 @@ const rawData = [
 const columns = (showEditModal, showDeleteModal) => [
   {
     title: "Sl#",
-    dataIndex: "serial",
-    key: "serial",
+    dataIndex: "_id",
+    key: "_id",
+    render: (item, record, index) => <>{`#${index + 1}`}</>,
   },
   {
     title: "Product Name",
-    dataIndex: "productName",
-    key: "productName",
+    dataIndex: "name",
+    key: "name",
     render: (_, record) => {
       return (
         <div className="flex items-center gap-2">
           <Avatar
             shape="square"
             size="default"
-            src={record.productImg}
-            alt={record.productName}
+            src={`${imageUrl}${record?.images}`}
+            alt={record.name}
             onError={(e) => {
               console.error("Image failed to load:", record.productImg);
               e.target.src = "https://via.placeholder.com/50";
             }}
           />
-          <span>{record.productName}</span>
+          <span>{record.name}</span>
         </div>
       );
     },
   },
   {
     title: "Price",
-    dataIndex: "productPrice",
-    key: "productPrice",
+    dataIndex: "price",
+    key: "price",
   },
   {
     title: "Model",
-    dataIndex: "productModel",
-    key: "productModel",
+    dataIndex: "model",
+    key: "model",
   },
   {
     title: "Capacity",
-    dataIndex: "productCapacity",
-    key: "productCapacity",
+    dataIndex: "capacity",
+    key: "capacity",
   },
   {
     title: "Power",
-    dataIndex: "productPower",
-    key: "productPower",
+    dataIndex: "power",
+    key: "power",
   },
   {
     title: "Status",
