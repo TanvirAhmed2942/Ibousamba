@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Button, ConfigProvider } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
-function DeleteModal({ isOpen, onClose, onConfirm, handleOk, handleClose }) {
+function DeleteModal({ isOpen, onClose, onConfirm }) {
   return (
     <ConfigProvider
       theme={{
@@ -15,16 +15,15 @@ function DeleteModal({ isOpen, onClose, onConfirm, handleOk, handleClose }) {
       }}
     >
       <Modal
-        // title="Delete Confirmation"
         visible={isOpen}
         onCancel={onClose}
         footer={[
           <div className="w-full flex items-center justify-center gap-2">
-            <Button key="cancel" onClick={handleClose}>
+            <Button key="cancel" onClick={onClose}>
               Cancel
             </Button>
 
-            <Button key="delete" type="primary" danger onClick={handleOk}>
+            <Button key="delete" type="primary" danger onClick={onConfirm}>
               Delete
             </Button>
           </div>,
