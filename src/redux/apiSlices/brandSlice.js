@@ -3,12 +3,12 @@ import { api } from "../api/baseApi";
 const brancdSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     createBrand: builder.mutation({
-      query: (categoryData) => ({
+      query: (data) => ({
         url: "/brand",
         method: "POST",
-        body: categoryData,
+        body: data,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["Brand"],
     }),
     updateBrand: builder.mutation({
       query: ({ id, data }) => {
@@ -26,7 +26,7 @@ const brancdSlice = api.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["Brand"],
     }),
     brand: builder.query({
       query: () => ({
@@ -34,7 +34,7 @@ const brancdSlice = api.injectEndpoints({
         method: "GET",
         // };
       }),
-      providesTags: ["Category"],
+      providesTags: ["Brand"],
     }),
   }),
 });

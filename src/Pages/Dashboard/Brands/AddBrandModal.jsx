@@ -8,6 +8,7 @@ import {
   Upload,
   Image,
   message,
+  Spin,
 } from "antd";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
 
@@ -16,6 +17,7 @@ const AddBrandModal = ({
   handleClose,
   handleSave,
   initialBrand,
+  isLoading,
 }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
@@ -24,8 +26,16 @@ const AddBrandModal = ({
   // Populate form when editing
   useEffect(() => {
     if (initialBrand) {
-      form.setFieldsValue({ name: initialBrand.name });
-      setPreviewImage(initialBrand.Img || ""); // Existing image preview
+      form.setFieldsValue({
+        brandUrl: initialBrand.brandUrl || "",
+      });
+
+      // Set preview image if available
+      if (initialBrand.image) {
+        setPreviewImage(initialBrand.image);
+      } else {
+        setPreviewImage("");
+      }
     } else {
       form.resetFields();
       setPreviewImage("");
@@ -47,17 +57,25 @@ const AddBrandModal = ({
   // Handle Form Submit
   const onFinish = (values) => {
     try {
-      const imageToSend =
-        fileList.length > 0 ? fileList[0].originFileObj : null;
+      // Get the image file if selected
+      const imageFile = fileList.length > 0 ? fileList[0].originFileObj : null;
 
-      if (!imageToSend && !initialBrand?.Img) {
+      // Validate input
+      if (!values.brandUrl) {
+        message.error("Please enter a brand URL");
+        return;
+      }
+
+      if (!imageFile && !initialBrand?.image) {
         message.error("Please upload an image");
         return;
       }
 
+      // Prepare data for parent component
       const brandData = {
-        name: values.name,
-        Img: imageToSend || initialBrand.Img,
+        brandUrl: values.brandUrl,
+        imageFile: imageFile, // Send the file object to parent
+        existingImage: initialBrand?.image || null, // Send existing image if available
       };
 
       console.log("Form data on save:", brandData);
@@ -89,60 +107,67 @@ const AddBrandModal = ({
         open={isModalOpen}
         onCancel={handleClose}
         footer={null}
+        closable={!isLoading}
+        maskClosable={!isLoading}
       >
-        <Form layout="vertical" form={form} onFinish={onFinish}>
-          {/* Upload Component */}
-          <Form.Item label="Brand Image">
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              onChange={handleChange}
-              beforeUpload={() => false} // Prevent automatic upload
-              showUploadList={false}
-            >
-              {fileList.length >= 1 ? null : (
-                <div className="flex flex-col items-center">
-                  <LiaCloudUploadAltSolid size={25} className="text-black" />
-                  <p className="text-black">Click or drag file to upload</p>
-                </div>
-              )}
-            </Upload>
-          </Form.Item>
-
-          {/* Image Preview */}
-          {previewImage && (
-            <Form.Item label="Preview">
-              <div className="flex justify-center">
-                <Image src={previewImage} width={100} />
-                <Button
-                  size="small"
-                  danger
-                  onClick={() => {
-                    setFileList([]);
-                    setPreviewImage("");
-                  }}
-                  className="ml-2"
-                >
-                  Remove
-                </Button>
-              </div>
+        <Spin spinning={isLoading} tip="Processing...">
+          <Form layout="vertical" form={form} onFinish={onFinish}>
+            {/* Upload Component */}
+            <Form.Item label="Brand Image" required>
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onChange={handleChange}
+                beforeUpload={() => false} // Prevent automatic upload
+                showUploadList={false}
+                disabled={isLoading}
+              >
+                {fileList.length >= 1 ? null : (
+                  <div className="flex flex-col items-center">
+                    <LiaCloudUploadAltSolid size={25} className="text-black" />
+                    <p className="text-black">Click or drag file to upload</p>
+                  </div>
+                )}
+              </Upload>
             </Form.Item>
-          )}
 
-          <Form.Item
-            label="Brand Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter a brand name" }]}
-          >
-            <Input />
-          </Form.Item>
+            {/* Image Preview */}
+            {previewImage && (
+              <Form.Item label="Preview">
+                <div className="flex justify-center">
+                  <Image src={previewImage} width={100} />
+                  <Button
+                    size="small"
+                    danger
+                    onClick={() => {
+                      setFileList([]);
+                      setPreviewImage("");
+                    }}
+                    className="ml-2"
+                    disabled={isLoading}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </Form.Item>
+            )}
 
-          <Form.Item>
-            <Button block htmlType="submit">
-              {initialBrand ? "Update" : "Save"}
-            </Button>
-          </Form.Item>
-        </Form>
+            {/* Brand URL field */}
+            <Form.Item
+              label="Brand URL"
+              name="brandUrl"
+              rules={[{ required: true, message: "Please enter a brand URL" }]}
+            >
+              <Input placeholder="https://example.com" disabled={isLoading} />
+            </Form.Item>
+
+            <Form.Item>
+              <Button block htmlType="submit" disabled={isLoading}>
+                {initialBrand ? "Update" : "Save"}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Spin>
       </Modal>
     </ConfigProvider>
   );

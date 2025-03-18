@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Button, Upload, Image } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { imageUrl } from "../../../../redux/api/baseApi";
 
 const EditSubCategoryModal = ({ visible, onCancel, onOk, record }) => {
-  const [categoryName, setCategoryName] = useState(record?.category || "");
+  const [categoryName, setCategoryName] = useState("");
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState(record?.categoryImg || "");
+  const [previewImage, setPreviewImage] = useState("");
   const [isEditingImage, setIsEditingImage] = useState(false);
 
+  // Reset modal content whenever the `record` changes (to avoid stale state)
+  useEffect(() => {
+    if (record) {
+      setCategoryName(record?.category || "");
+      setPreviewImage(record?.categoryImg || ""); // Default to placeholder if no image
+      setFileList([]); // Clear the file list initially
+    }
+  }, [record]);
+
   const handleClose = () => {
-    setCategoryName(record?.category || "");
+    setCategoryName(""); // Clear fields when closing the modal
     setFileList([]);
-    setPreviewImage(record?.categoryImg || "");
+    setPreviewImage("");
     setIsEditingImage(false);
     onCancel();
   };
@@ -20,12 +30,13 @@ const EditSubCategoryModal = ({ visible, onCancel, onOk, record }) => {
     const formData = new FormData();
     formData.append("name", categoryName);
     if (fileList.length > 0) {
-      formData.append("image", fileList[0].originFileObj);
+      formData.append("image", fileList[0].originFileObj); // Add the file to the form data
     }
 
-    console.log("Form Data Entries:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+    // Log the updated category name and image
+    console.log("Updated Category Name:", categoryName);
+    if (fileList.length > 0) {
+      console.log("Updated Image:", fileList[0].originFileObj);
     }
 
     onOk(formData);
@@ -40,6 +51,7 @@ const EditSubCategoryModal = ({ visible, onCancel, onOk, record }) => {
     setFileList(newFileList);
     if (newFileList.length > 0) {
       handlePreview(newFileList[0]);
+      console.log("Image Changed:", newFileList[0].originFileObj); // Log the updated image
     }
   };
 
@@ -52,12 +64,13 @@ const EditSubCategoryModal = ({ visible, onCancel, onOk, record }) => {
       closable={false}
       footer={null}
     >
+      {/* Display Image preview or Upload option */}
       {!isEditingImage ? (
         <div className="flex justify-center relative">
           <Image
             preview={false}
-            src={previewImage}
-            style={{ width: "100%", maxWidth: 300 }}
+            src={`${imageUrl}${previewImage}`}
+            style={{ width: "100%", maxWidth: 200 }}
           />
           <Button
             onClick={() => setIsEditingImage(true)}
@@ -78,11 +91,17 @@ const EditSubCategoryModal = ({ visible, onCancel, onOk, record }) => {
         </Upload>
       )}
 
+      {/* Input for category name */}
       <Input
         value={categoryName}
-        onChange={(e) => setCategoryName(e.target.value)}
+        onChange={(e) => {
+          setCategoryName(e.target.value);
+          console.log("Category Name Changed:", e.target.value); // Log the updated name
+        }}
         className="h-9 mt-3"
       />
+
+      {/* Save button */}
       <Button block className="h-9 mt-4" onClick={handleSave}>
         Save
       </Button>

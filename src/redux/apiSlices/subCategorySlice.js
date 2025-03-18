@@ -8,6 +8,7 @@ const subCategorySlice = api.injectEndpoints({
         method: "POST",
         body: categoryData,
       }),
+      invalidatesTags: ["SubCategory"],
     }),
     updateSubCategory: builder.mutation({
       query: ({ id, updatedData }) => ({
@@ -15,18 +16,21 @@ const subCategorySlice = api.injectEndpoints({
         method: "PATCH",
         body: updatedData,
       }),
+      invalidatesTags: ["SubCategory"],
     }),
     deleteSubCategory: builder.mutation({
       query: (id) => ({
         url: `/sub-category/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["SubCategory"],
     }),
     getSubCategories: builder.query({
       query: (categoryID) => ({
-        url: `/sub-category/${categoryID}`, // ✅ Sending categoryID as a URL parameter
+        url: `/sub-category/${categoryID}`,
         method: "GET",
       }),
+      providesTags: ["SubCategory"],
     }),
   }),
 });

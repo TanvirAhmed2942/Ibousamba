@@ -145,12 +145,12 @@ const EditDeleteCategoryModal = ({
           <div>
             <div className="flex flex-col gap-1">
               {/* Image Display/Upload */}
-              {!isEditingImage && previewImage ? (
+              {!isEditingImage ? (
                 <div className="flex justify-center relative">
                   <Image
                     preview={false}
                     src={previewImage}
-                    style={{ width: "100%", maxWidth: 300 }}
+                    style={{ width: "100%", maxWidth: 200 }}
                     alt="Category"
                   />
                   <Button
