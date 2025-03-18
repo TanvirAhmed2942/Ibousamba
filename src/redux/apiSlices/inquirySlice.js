@@ -8,7 +8,7 @@ const inquirySlice = api.injectEndpoints({
         method: "POST",
         body: categoryData,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["Inquiry"],
     }),
     updateInquiry: builder.mutation({
       query: ({ id, data }) => {
@@ -18,6 +18,7 @@ const inquirySlice = api.injectEndpoints({
           body: data,
         };
       },
+      invalidatesTags: ["Inquiry"],
     }),
     deleteInquiry: builder.mutation({
       query: (id) => {
@@ -26,21 +27,38 @@ const inquirySlice = api.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["Inquiry"],
     }),
+
+    inquiryCount: builder.query({
+      query: () => ({
+        url: `/inquiry/count`,
+        method: "GET",
+      }),
+      providesTags: ["Inquiry"],
+    }),
+    inquiryChartData: builder.query({
+      query: (year) => ({
+        url: `/inquiry/year?year=${year}`,
+        method: "GET",
+      }),
+      providesTags: ["Inquiry"],
+    }),
+
     inquiry: builder.query({
       query: () => ({
         url: `/inquiry`,
         method: "GET",
-        // };
       }),
-      providesTags: ["Category"],
+      providesTags: ["Inquiry"],
     }),
   }),
 });
 
 export const {
   useInquiryQuery,
+  useInquiryCountQuery,
+  useInquiryChartDataQuery,
   useCreateInquiryMutation,
   useUpdateInquiryMutation,
   useDeleteInquiryMutation,

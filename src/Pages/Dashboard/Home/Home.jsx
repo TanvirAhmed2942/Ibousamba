@@ -3,6 +3,10 @@ import { FaBoxOpen, FaFolderOpen } from "react-icons/fa6";
 import TotalOrderList from "./TotalOrderList";
 import Inquiry from "./Inquiry";
 import { useProductCountQuery } from "../../../redux/apiSlices/productSlice";
+import {
+  useInquiryChartDataQuery,
+  useInquiryCountQuery,
+} from "../../../redux/apiSlices/inquirySlice";
 
 const Card = ({ item }) => (
   <div className="flex w-full items-center justify-start pl-10 h-28 rounded-xl bg-quilocoP gap-5">
@@ -20,12 +24,15 @@ const Card = ({ item }) => (
 
 const Home = () => {
   const productCount = useProductCountQuery();
+  const inquiryCount = useInquiryCountQuery();
+
   console.log("productCount", productCount?.data?.data?.total);
+  console.log("inquiryCount", inquiryCount?.data?.data?.total);
 
   const stats = [
     {
       label: "Total Inquiry",
-      value: "518",
+      value: inquiryCount?.data?.data?.total,
       icon: <FaFolderOpen size={60} className="text-white" />,
       bg: "bg-quilocoS",
     },
