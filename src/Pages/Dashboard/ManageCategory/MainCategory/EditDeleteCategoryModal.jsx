@@ -1,79 +1,97 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Modal,
   Input,
-  Button,
-  ConfigProvider,
-  Form,
   Upload,
+  message,
+  ConfigProvider,
   Image,
+  Button,
+  Form,
 } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import { imageUrl } from "../../../../redux/api/baseApi";
 
 const EditDeleteCategoryModal = ({
   visible,
   onCancel,
+  onDelete,
   mode,
   record,
   onCategoryChange,
-  onDelete,
 }) => {
-  const [form] = Form.useForm();
+  const [categoryName, setCategoryName] = useState("");
   const [fileList, setFileList] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
   const [isEditingImage, setIsEditingImage] = useState(false);
-  const [imageBase64, setImageBase64] = useState("");
 
-  // Update form and state when record or visibility changes
+  // Reset state when modal opens or record changes
   useEffect(() => {
-    if (record && visible) {
-      form.setFieldsValue({
-        categoryName: record.name || "",
-      });
-      setPreviewImage(`${imageUrl}${record.image}`);
+    if (visible && record) {
+      setCategoryName(record.name || "");
+      setFileList(
+        record.image
+          ? [
+              {
+                uid: "-1",
+                name: "image.png",
+                status: "done",
+                url: `${imageUrl}${record.image}`,
+              },
+            ]
+          : []
+      );
+      setUploadedFile(null); // Reset uploaded file
+      setPreviewImage(record.image ? `${imageUrl}${record.image}` : "");
       setIsEditingImage(false);
+    } else {
+      // Clear state when modal closes
+      setCategoryName("");
       setFileList([]);
-      setImageBase64("");
+      setUploadedFile(null);
+      setPreviewImage("");
     }
-  }, [record, visible, form]);
+  }, [visible, record]);
 
-  // Convert file to base64
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  const handleNameChange = (e) => {
+    setCategoryName(e.target.value);
   };
 
-  // Handle save button click
-  const handleSave = async () => {
-    try {
-      const values = await form.validateFields();
-      const updatedName = values.categoryName;
-
-      // Submit both the name and image (if changed)
-      onCategoryChange(record, imageBase64, updatedName);
-    } catch (errorInfo) {
-      console.log("Validation failed:", errorInfo);
-    }
-  };
-
-  // Handle file changes (uploading a new image)
-  const handleChange = async ({ fileList: newFileList }) => {
+  const handleUploadChange = ({ fileList: newFileList, file }) => {
     setFileList(newFileList);
+    if (file.status !== "uploading") {
+      setUploadedFile(file.originFileObj || file);
 
-    // If there's a file, convert it to base64
-    if (newFileList.length > 0 && newFileList[0].originFileObj) {
-      const base64 = await getBase64(newFileList[0].originFileObj);
-      setImageBase64(base64);
-      setPreviewImage(base64); // Also update preview
+      // Create preview image
+      if (file.originFileObj) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => setPreviewImage(reader.result);
+        reader.onerror = (error) => console.error("Error reading file:", error);
+      }
     }
   };
 
-  // Toggle between displaying the image and uploading a new one
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("You can only upload image files!");
+      return Upload.LIST_IGNORE;
+    }
+    setUploadedFile(file);
+    return false; // Prevent auto upload
+  };
+
+  const handleSave = () => {
+    if (!record) {
+      message.error("No category selected");
+      return;
+    }
+
+    onCategoryChange(uploadedFile, categoryName, record);
+  };
+
   const handleEditClick = () => {
     setIsEditingImage(true);
   };
@@ -125,57 +143,53 @@ const EditDeleteCategoryModal = ({
       >
         {mode === "edit" ? (
           <div>
-            <Form form={form} layout="vertical" className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
               {/* Image Display/Upload */}
-              {!isEditingImage ? (
-                <Form.Item>
-                  <div className="flex justify-center relative">
-                    <Image
-                      preview={false}
-                      src={previewImage}
-                      style={{ width: "100%", maxWidth: 300 }}
-                      alt="Category"
-                    />
-                    <Button
-                      onClick={handleEditClick}
-                      className="absolute top-0 right-0"
-                      icon={<EditOutlined />}
-                      shape="circle"
-                      size="large"
-                    />
-                  </div>
-                </Form.Item>
+              {!isEditingImage && previewImage ? (
+                <div className="flex justify-center relative">
+                  <Image
+                    preview={false}
+                    src={previewImage}
+                    style={{ width: "100%", maxWidth: 300 }}
+                    alt="Category"
+                  />
+                  <Button
+                    onClick={handleEditClick}
+                    className="absolute top-0 right-0"
+                    icon={<EditOutlined />}
+                    shape="circle"
+                    size="large"
+                  />
+                </div>
               ) : (
-                <Form.Item>
+                <div>
                   <Upload
                     listType="picture-card"
                     fileList={fileList}
-                    onChange={handleChange}
-                    beforeUpload={() => false} // Prevent auto upload
+                    onChange={handleUploadChange}
+                    beforeUpload={beforeUpload}
+                    maxCount={1}
                   >
-                    {fileList.length >= 1 ? null : (
+                    {fileList.length < 1 && (
                       <div className="w-full flex items-center justify-center">
                         <div style={{ marginTop: 8 }}>Upload</div>
                       </div>
                     )}
                   </Upload>
-                </Form.Item>
+                </div>
               )}
 
-              {/* Category Name Form */}
-              <Form.Item
-                label="Category Name"
-                name="categoryName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your Category Name",
-                  },
-                ]}
-              >
-                <Input className="h-9" />
-              </Form.Item>
-            </Form>
+              {/* Category Name Input */}
+              <div className="mb-4">
+                <label className="block mb-2">Category Name</label>
+                <Input
+                  value={categoryName}
+                  onChange={handleNameChange}
+                  placeholder="Enter category name"
+                  className="h-9"
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <div className="w-full flex items-center justify-center">
