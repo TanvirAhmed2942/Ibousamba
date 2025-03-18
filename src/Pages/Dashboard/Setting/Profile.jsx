@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, ConfigProvider, Form, Input, Upload, message } from "antd";
 import { FaFeather } from "react-icons/fa6";
 import { HiMiniPencil } from "react-icons/hi2";
@@ -44,13 +44,8 @@ function Profile() {
                   message.error("You can only upload image files!");
                   return Upload.LIST_IGNORE;
                 }
+                setUploadedImage(file); // Store the file directly
                 return false; // Don't upload automatically
-              }}
-              onChange={(info) => {
-                if (info.file.status !== "uploading") {
-                  setUploadedImage(info.file.originFileObj || info.file);
-                  message.success(`${info.file.name} ready to upload`);
-                }
               }}
             >
               <button>
@@ -104,69 +99,57 @@ const ProfileDetails = ({
   const { updateUser } = useUser(); // Assuming you have an updateUser function in your user provider
   const [updateProfile, { isLoading, isError }] = useUpdateProfileMutation();
 
-  // const handleFinish = async (values) => {
-  //   try {
-  //     // Create a FormData object to send all data including the image
-  //     const formData = new FormData();
-
-  //     // Append all form values to FormData, including 'role'
-  //     Object.keys(values).forEach((key) => {
-  //       // Only append key-value pairs where the value is not null or undefined
-  //       if (values[key] !== null && values[key] !== undefined) {
-  //         formData.append(key, values[key]);
-  //       }
-  //     });
-
-  //     // Append the uploaded image if present
-  //     if (uploadedImage) {
-  //       formData.append("image", uploadedImage); // Add the image to FormData
-  //     }
-
-  //     // Log FormData content (for debugging)
-  //     formData.forEach((value, key) => {
-  //       console.log(key, value);
-  //     });
-
-  //     // Using await with the API call to update the profile
-  //     const response = await updateProfile(formData).unwrap(); // unwrap the response to get the actual result
-
-  //     // If the response is successful, update the state
-  //     if (response) {
-  //       message.success("Profile updated successfully");
-  //       setIsEditing(false); // Exit editing mode
-  //     }
-  //   } catch (error) {
-  //     // Catch any errors that occur in the try block
-  //     console.error("Error updating profile:", error);
-  //     message.error("Failed to update profile: " + error.message);
-  //   }
-  // };
+  // Reset form when user data changes or editing mode changes
+  useEffect(() => {
+    if (user) {
+      form.setFieldsValue({
+        name: user.firstName,
+        email: user.email,
+        phone: user.mobileNumber,
+        role: user.role,
+      });
+    }
+  }, [user, form]);
 
   const handleFinish = async (values) => {
     try {
       // Create a FormData object
       const formData = new FormData();
 
-      // Append only allowed fields: name, phone, and image
-      if (values.name) formData.append("name", values.name);
-      if (values.phone) formData.append("phone", values.phone);
-      if (uploadedImage) formData.append("image", uploadedImage);
+      // Add form values to FormData
+      formData.append("fullName", values.name);
+      formData.append("phone", values.phone);
 
-      // Log FormData content for debugging
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
+      // Add image if it exists
+      if (uploadedImage) {
+        formData.append("image", uploadedImage);
+      }
 
-      // API call to update the profile
-      const response = await updateProfile(formData).unwrap();
+      // Log FormData for debugging
+      console.log("FORM DATA CONTENTS:");
+      for (const pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
-      if (response) {
+      // Important: Match the API structure - pass { data: formData }
+      const response = await updateProfile({ data: formData }).unwrap();
+
+      console.log("Profile update response:", response);
+
+      if (response.success) {
         message.success("Profile updated successfully");
         setIsEditing(false);
+
+        // Update local user data if you have a function for that
+        if (updateUser && response.data) {
+          updateUser(response.data);
+        }
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      message.error("Failed to update profile: " + error.message);
+      message.error(
+        "Failed to update profile: " + (error.message || "Unknown error")
+      );
     }
   };
 
@@ -196,12 +179,6 @@ const ProfileDetails = ({
       <Form
         form={form}
         layout="vertical"
-        initialValues={{
-          name: user?.firstName,
-          email: user?.email,
-          phone: user?.mobileNumber,
-          role: user?.role,
-        }}
         onFinish={handleFinish}
         className="w-full"
       >
@@ -221,13 +198,7 @@ const ProfileDetails = ({
             label={<p className="ml-1.5">Email</p>}
             className="w-full"
             rules={[
-              {
-                pattern:
-                  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\.com$/,
-                message: "Please enter a valid email address!",
-                // pattern: new RegExp("/S+@S+.S+/"),
-                type: "email",
-              },
+              { type: "email", message: "Please enter a valid email address!" },
             ]}
           >
             <Input
@@ -252,7 +223,6 @@ const ProfileDetails = ({
             name="role"
             label={<p className="ml-1.5">Role</p>}
             className="w-full"
-            initialValue="admin" // Role is always admin
           >
             <Input
               className="bg-[1f1f1f] border-none h-12 text-slate-300"
@@ -266,6 +236,7 @@ const ProfileDetails = ({
             <Button
               block
               htmlType="submit"
+              loading={isLoading}
               className="bg-samba/80 border-none text-white min-w-20 min-h-10 text-xs rounded-lg"
             >
               Save Changes
