@@ -33,9 +33,9 @@ export default function Inquiry() {
       theme={{
         components: {
           DatePicker: {
-            hoverBg: "#0f172a ",
+            hoverBg: "#5e5e5e ",
             hoverBorderColor: "white ",
-            activeBg: "#0f172a ",
+            activeBg: "#292929 ",
             activeBorderColor: "white ",
           },
         },
@@ -47,7 +47,7 @@ export default function Inquiry() {
         <DatePicker
           onChange={onChange}
           picker="year"
-          className="border-1 h-8 w-28 py-2 rounded-lg mb-4 text-white bg-black"
+          className="border-1 h-8 w-28 py-2 rounded-lg mb-4 bg-[#292929] cursor-pointer"
           placeholder="2025"
           style={{ backdropFilter: "red", color: "white" }}
           suffixIcon={

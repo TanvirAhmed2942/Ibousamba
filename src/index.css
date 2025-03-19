@@ -530,10 +530,46 @@ span.anticon.anticon-right.ant-collapse-arrow {
   height: 40px;
   background: transparent !important;
 }
+
+.ant-pagination.ant-pagination-mini:not(.ant-pagination-disabled)
+  .ant-pagination-item:not(.ant-pagination-item-active) {
+  background-color: white !important;
+  border-color: transparent;
+  /* margin-left: 5px; */
+}
+
 .ant-pagination .ant-pagination-prev .ant-pagination-item-link,
 .ant-pagination .ant-pagination-next .ant-pagination-item-link {
   /* border-color: #a3a3a3; */
   background-color: #a3a3a3;
+}
+
+.ant-pagination.ant-pagination-mini
+  .ant-pagination-prev
+  .ant-pagination-item-link {
+  background-color: #a3a3a3;
+}
+.ant-pagination.ant-pagination-mini
+  .ant-pagination-next
+  .ant-pagination-item-link {
+  background-color: #a3a3a3;
+  /* margin: 2px; */
+}
+.ant-pagination.ant-pagination-mini
+  .ant-pagination-next
+  .ant-pagination-item-link
+  :hover {
+  background-color: #a3a3a3;
+  /* margin: 2px; */
+}
+
+.ant-pagination-item:not(.ant-pagination-item-active)
+  .ant-pagination-item-active {
+  margin-left: 0px !important;
+}
+.ant-pagination.ant-pagination-mini .ant-pagination-item {
+  margin-left: 3px;
+  margin-right: 3px;
 }
 .ant-pagination
   .ant-pagination-jump-next
@@ -548,11 +584,57 @@ span.anticon.anticon-right.ant-collapse-arrow {
   .ant-pagination-item-ellipsis {
   color: #a3a3a3;
 }
-
+.ant-pagination
+  .ant-pagination-jump-prev
+  .ant-pagination-item-container
+  .ant-pagination-item-ellipsis {
+  color: #a3a3a3;
+}
+.ant-pagination-item-link:hover {
+  background-color: #a3a3a3;
+}
 .ant-form.css-dev-only-do-not-override-n6xf7a {
   opacity: 1 !important;
 }
 
 .ant-picker-input .ant-picker-input-placeholder value {
   color: #a01d25 !important;
+}
+
+anticon .anticon-close-circle {
+  color: #a3a3a3;
+}
+
+/* From Uiverse.io by Shoh2008  LOADER*/
+.loader {
+  width: 45px;
+  height: 40px;
+  background: linear-gradient(
+      #0000 calc(1 * 100% / 6),
+      #fff 0 calc(3 * 100% / 6),
+      #0000 0
+    ),
+    linear-gradient(
+      #0000 calc(2 * 100% / 6),
+      #fff 0 calc(4 * 100% / 6),
+      #0000 0
+    ),
+    linear-gradient(
+      #0000 calc(3 * 100% / 6),
+      #fff 0 calc(5 * 100% / 6),
+      #0000 0
+    );
+  background-size: 10px 400%;
+  background-repeat: no-repeat;
+  animation: matrix 1s infinite linear;
+}
+
+@keyframes matrix {
+  0% {
+    background-position: 0% 100%, 50% 100%, 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%, 50% 0%, 100% 0%;
+  }
 }

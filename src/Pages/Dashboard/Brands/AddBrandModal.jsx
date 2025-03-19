@@ -54,18 +54,24 @@ const AddBrandModal = ({
     }
   };
 
+  // Validate file type
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("You can only upload image files!");
+    }
+
+    // Return false to prevent auto upload
+    return false;
+  };
+
   // Handle Form Submit
   const onFinish = (values) => {
     try {
       // Get the image file if selected
       const imageFile = fileList.length > 0 ? fileList[0].originFileObj : null;
 
-      // Validate input
-      if (!values.brandUrl) {
-        message.error("Please enter a brand URL");
-        return;
-      }
-
+      // Validate image requirement
       if (!imageFile && !initialBrand?.image) {
         message.error("Please upload an image");
         return;
@@ -118,9 +124,10 @@ const AddBrandModal = ({
                 listType="picture-card"
                 fileList={fileList}
                 onChange={handleChange}
-                beforeUpload={() => false} // Prevent automatic upload
+                beforeUpload={beforeUpload}
                 showUploadList={false}
                 disabled={isLoading}
+                accept="image/*"
               >
                 {fileList.length >= 1 ? null : (
                   <div className="flex flex-col items-center">
@@ -156,7 +163,13 @@ const AddBrandModal = ({
             <Form.Item
               label="Brand URL"
               name="brandUrl"
-              rules={[{ required: true, message: "Please enter a brand URL" }]}
+              rules={[
+                { required: true, message: "Please enter a brand URL" },
+                {
+                  type: "url",
+                  message: "Please enter a valid URL",
+                },
+              ]}
             >
               <Input placeholder="https://example.com" disabled={isLoading} />
             </Form.Item>

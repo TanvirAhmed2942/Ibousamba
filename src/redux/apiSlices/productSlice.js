@@ -37,8 +37,8 @@ const productSlice = api.injectEndpoints({
       providesTags: ["Product"],
     }),
     product: builder.query({
-      query: () => ({
-        url: `/product`,
+      query: (page) => ({
+        url: `/product?page=${page}`,
         method: "GET",
       }),
       providesTags: ["Product"],

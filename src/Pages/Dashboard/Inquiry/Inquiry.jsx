@@ -8,6 +8,7 @@ import {
 } from "../../../redux/apiSlices/inquirySlice";
 import { MdDeleteForever } from "react-icons/md";
 import InquiryDeleteModal from "./InquiryDeleteModal";
+import Loading from "../../../components/Loading";
 
 function Inquiry() {
   const { data: inquiries, isLoading, isError } = useInquiryQuery(); // Fetch inquiries
@@ -15,7 +16,7 @@ function Inquiry() {
   console.log("inquiries=", inquiries?.data?.result);
   const details = inquiries?.data?.result || []; // Ensure it's always an array
 
-  if (isLoading) return <Spin size="large" />;
+  if (isLoading) return <Loading />;
   if (isError)
     return <Alert message="Failed to load inquiries!" type="error" />;
 

@@ -20,5 +20,13 @@ export const imageUrl = "http://10.0.70.36:8011/";
 export const api = createApi({
   baseQuery,
   endpoints: () => ({}),
-  tagTypes: ["Category", "SubCategory", "Brand", "Product", "FAQ", "Inquiry"],
+  tagTypes: [
+    "Category",
+    "SubCategory",
+    "Brand",
+    "Product",
+    "FAQ",
+    "Inquiry",
+    "Profile",
+  ],
 });

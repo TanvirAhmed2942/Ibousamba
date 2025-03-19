@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Table, ConfigProvider, message } from "antd";
+import { Table, ConfigProvider, message, Spin } from "antd"; // Import the Spin component
 import { FiEdit } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -10,13 +10,14 @@ import {
   useUpdateCategoryMutation,
 } from "../../../../redux/apiSlices/categorySlice";
 import { imageUrl } from "../../../../redux/api/baseApi";
+import Loading from "../../../../components/Loading";
 
 const MainCategoryTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMode, setModalMode] = useState("edit"); // "edit" or "delete"
   const [currentRecord, setCurrentRecord] = useState(null);
 
-  const { data } = useCategoryQuery();
+  const { data, isLoading: isCategoryLoading } = useCategoryQuery();
   const [deleteCategory] = useDeleteCategoryMutation();
   const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
 
@@ -44,47 +45,28 @@ const MainCategoryTable = () => {
   };
 
   const handleEditCategory = async (file, updatedName, record) => {
-    // Use the provided record parameter instead of currentRecord state
-    // This ensures we're working with the correct record data
     if (!record || !record._id) {
       message.error("Invalid category selected");
       return;
     }
 
     try {
-      // Create a new FormData object to send the data
       const formData = new FormData();
+      formData.append("name", updatedName);
 
-      // Append the category name to the FormData object
-      formData.append("name", updatedName); // Ensure updatedName is valid
-
-      // If there's a new file (image), append it to the FormData object
       if (file) {
-        formData.append("image", file); // Append the image file directly
+        formData.append("image", file);
       }
 
-      // Log the FormData object content
-      console.log("Form data contents:");
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value instanceof File ? value.name : value}`);
-      });
-
-      console.log("Updating category with FormData:", {
-        id: record._id,
-        updatedName: updatedName,
-        hasImage: !!file,
-      });
-
-      // Send the FormData to the backend
       const response = await updateCategory({
         id: record._id,
-        data: formData, // Send FormData as the payload
+        data: formData,
       }).unwrap();
 
       message.success("Successfully updated category");
       console.log("Category Update Response:", response);
       setIsModalVisible(false);
-      setCurrentRecord(null); // Clear the current record after update
+      setCurrentRecord(null);
     } catch (err) {
       console.log("Category Update Error:", err);
       message.error(
@@ -137,13 +119,13 @@ const MainCategoryTable = () => {
 
   const openEditModal = (record) => {
     setModalMode("edit");
-    setCurrentRecord({ ...record }); // Make a copy of the record to prevent mutations
+    setCurrentRecord({ ...record });
     setIsModalVisible(true);
   };
 
   const openDeleteModal = (record) => {
     setModalMode("delete");
-    setCurrentRecord({ ...record }); // Make a copy of the record to prevent mutations
+    setCurrentRecord({ ...record });
     setIsModalVisible(true);
   };
 
@@ -165,17 +147,22 @@ const MainCategoryTable = () => {
         }}
       >
         <div className="custom-table">
-          <Table
-            columns={columns}
-            dataSource={data?.data}
-            rowKey="_id" // Ensure each row has a unique key
-            pagination={{
-              defaultPageSize: 5,
-              position: ["bottomRight"],
-              size: "default",
-              total: data?.data?.length || 0,
-            }}
-          />
+          {/* Show the spinner while category data is loading */}
+          {isCategoryLoading ? (
+            <Loading />
+          ) : (
+            <Table
+              columns={columns}
+              dataSource={data?.data}
+              rowKey="_id"
+              pagination={{
+                defaultPageSize: 5,
+                position: ["bottomRight"],
+                size: "default",
+                total: data?.data?.length || 0,
+              }}
+            />
+          )}
         </div>
       </ConfigProvider>
 

@@ -94,7 +94,7 @@ const Sidebar = ({ isCollapsed }) => {
       key: "/products",
       icon: <LuBoxes size={25} />,
       label: isCollapsed ? (
-        <Link to="/products"></Link>
+        <Link to="/products">Products</Link>
       ) : (
         <Link to="/products">Products</Link>
       ),
@@ -103,7 +103,7 @@ const Sidebar = ({ isCollapsed }) => {
       key: "/all-brands",
       icon: <img src={brand} width={25} />,
       label: isCollapsed ? (
-        <Link to="/all-brands"></Link>
+        <Link to="/all-brands">Brands</Link>
       ) : (
         <Link to="/all-brands">Brands</Link>
       ),
