@@ -552,3 +552,7 @@ span.anticon.anticon-right.ant-collapse-arrow {
 .ant-form.css-dev-only-do-not-override-n6xf7a {
   opacity: 1 !important;
 }
+
+.ant-picker-input .ant-picker-input-placeholder value {
+  color: #a01d25 !important;
+}

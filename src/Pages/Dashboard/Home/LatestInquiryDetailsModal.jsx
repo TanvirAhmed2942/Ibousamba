@@ -1,7 +1,11 @@
 import React from "react";
 import { Modal, Descriptions } from "antd";
 
-const InquiryDetailsModal = ({ isModalOpen, setIsModalOpen, inquiryData }) => {
+const LatestInquiryDetailsModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  inquiryData,
+}) => {
   return (
     <Modal
       title="Inquiry Details"
@@ -43,4 +47,4 @@ const InquiryDetailsModal = ({ isModalOpen, setIsModalOpen, inquiryData }) => {
   );
 };
 
-export default InquiryDetailsModal;
+export default LatestInquiryDetailsModal;

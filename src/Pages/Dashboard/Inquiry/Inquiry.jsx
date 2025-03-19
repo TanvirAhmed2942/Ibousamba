@@ -12,7 +12,8 @@ import InquiryDeleteModal from "./InquiryDeleteModal";
 function Inquiry() {
   const { data: inquiries, isLoading, isError } = useInquiryQuery(); // Fetch inquiries
 
-  console.log(inquiries);
+  console.log("inquiries=", inquiries?.data?.result);
+  const details = inquiries?.data?.result || []; // Ensure it's always an array
 
   if (isLoading) return <Spin size="large" />;
   if (isError)
@@ -62,7 +63,8 @@ function Inquiry() {
             ]}
           />
         </div>
-        <InquiryTable inquiries={inquiries?.data?.result || []} />
+        {/* Passing details as a prop */}
+        <InquiryTable inquiries={details} />
       </div>
     </ConfigProvider>
   );
@@ -71,17 +73,18 @@ function Inquiry() {
 export default Inquiry;
 
 const InquiryTable = ({ inquiries }) => {
-  const [localInquiries, setLocalInquiries] = useState(inquiries); // Add local state
+  const [localInquiries, setLocalInquiries] = useState(inquiries);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [deleteInquiry, { isLoading }] = useDeleteInquiryMutation();
 
   useEffect(() => {
-    setLocalInquiries(inquiries); // Update local state if inquiries prop changes
+    setLocalInquiries(inquiries);
   }, [inquiries]);
 
   const showDetailsModal = (record) => {
+    console.log("Selected Inquiry:", record);
     setSelectedInquiry(record);
     setIsDetailsModalOpen(true);
   };
@@ -98,7 +101,7 @@ const InquiryTable = ({ inquiries }) => {
         await deleteInquiry(selectedInquiry._id);
         setLocalInquiries((prev) =>
           prev.filter((inq) => inq._id !== selectedInquiry._id)
-        ); // Optimistic update
+        );
         setIsDeleteModalOpen(false);
       } catch (error) {
         console.error("Failed to delete inquiry:", error);
@@ -119,9 +122,24 @@ const InquiryTable = ({ inquiries }) => {
     { title: "User Email", dataIndex: "email", key: "email" },
     {
       title: "Inquiry Topics",
-      dataIndex: "inquiryTopics",
-      key: "inquiryTopics",
+      dataIndex: "options",
+      key: "options",
+      render: (_, record) => {
+        return (
+          <div className="flex flex-wrap gap-2">
+            {record.options.map((option, index) => (
+              <p
+                key={index}
+                className="border border-gray-300 rounded-lg px-1 py-.5  text-white"
+              >
+                {option}
+              </p>
+            ))}
+          </div>
+        );
+      },
     },
+
     { title: "Phone Number", dataIndex: "phone", key: "phone" },
     { title: "Your Inquiry", dataIndex: "description", key: "description" },
     {
@@ -173,8 +191,8 @@ const InquiryTable = ({ inquiries }) => {
       >
         <Table
           columns={columns}
-          dataSource={localInquiries} // Use local state here
-          rowKey="id"
+          dataSource={localInquiries}
+          rowKey="_id"
           pagination={{
             defaultPageSize: 5,
             position: ["bottomRight"],
@@ -183,12 +201,15 @@ const InquiryTable = ({ inquiries }) => {
           }}
         />
       </ConfigProvider>
+
+      {/* Inquiry Details Modal */}
       {/* Inquiry Details Modal */}
       <InquiryDetailsModal
         isModalOpen={isDetailsModalOpen}
         setIsModalOpen={setIsDetailsModalOpen}
         inquiryData={selectedInquiry}
       />
+
       {/* Inquiry Delete Modal */}
       <InquiryDeleteModal
         isOpen={isDeleteModalOpen}

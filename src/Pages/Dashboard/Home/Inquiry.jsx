@@ -29,15 +29,27 @@ export default function Inquiry() {
     })) || [];
 
   return (
-    <ConfigProvider>
+    <ConfigProvider
+      theme={{
+        components: {
+          DatePicker: {
+            hoverBg: "#0f172a ",
+            hoverBorderColor: "white ",
+            activeBg: "#0f172a ",
+            activeBorderColor: "white ",
+          },
+        },
+      }}
+    >
       <div className="flex items-center justify-between px-6">
         <h2 className="text-lg font-medium text-white">Inquiry Overview</h2>
 
         <DatePicker
           onChange={onChange}
           picker="year"
-          className="border-1 h-8 w-28 py-2 rounded-lg mb-4 text-black"
+          className="border-1 h-8 w-28 py-2 rounded-lg mb-4 text-white bg-black"
           placeholder="2025"
+          style={{ backdropFilter: "red", color: "white" }}
           suffixIcon={
             <div className="rounded-full w-6 h-6 p-1 flex items-center justify-center bg-gray-300">
               <MdOutlineDateRange color="#232323" />

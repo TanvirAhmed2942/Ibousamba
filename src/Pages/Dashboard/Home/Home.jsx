@@ -1,12 +1,12 @@
 import React from "react";
 import { FaBoxOpen, FaFolderOpen } from "react-icons/fa6";
-import TotalOrderList from "./TotalOrderList";
+
 import Inquiry from "./Inquiry";
 import { useProductCountQuery } from "../../../redux/apiSlices/productSlice";
-import {
-  useInquiryChartDataQuery,
-  useInquiryCountQuery,
-} from "../../../redux/apiSlices/inquirySlice";
+import { useInquiryCountQuery } from "../../../redux/apiSlices/inquirySlice";
+
+import LatestInquiryList from "./LatestInquiryList";
+import { Link } from "react-router-dom";
 
 const Card = ({ item }) => (
   <div className="flex w-full items-center justify-start pl-10 h-28 rounded-xl bg-quilocoP gap-5">
@@ -61,11 +61,13 @@ const Home = () => {
             <h3 className=" text-[24px] text-samba font-bold">
               Latest inquiry list:
             </h3>
-            <a className="underline cursor-pointer">See all</a>
+            <Link className="underline cursor-pointer" to="/inquiry">
+              See all
+            </Link>
           </div>
 
           <div
-            className="h-60 overflow-y-scroll rounded-lg bg-quilocoP [&::-webkit-scrollbar]:w-2
+            className="h-60 overflow-y-scroll rounded-lg bg-quilocoP [&::-webkit-scrollbar]:w-0
                     [&::-webkit-scrollbar-track]:rounded-full
                     [&::-webkit-scrollbar-track]:bg-gray-100
                     [&::-webkit-scrollbar-thumb]:rounded-full
@@ -73,7 +75,7 @@ const Home = () => {
                     dark:[&::-webkit-scrollbar-track]:bg-neutral-700
                     dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
           >
-            <TotalOrderList />
+            <LatestInquiryList />
           </div>
         </div>
       </div>
